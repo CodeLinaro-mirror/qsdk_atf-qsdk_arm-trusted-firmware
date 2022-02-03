@@ -59,6 +59,7 @@
  * Syscall for PIL
  */
 #define QTI_SIP_SVC_PIL_INIT_ID             U(0x02000201)
+#define QTI_SIP_SVC_PIL_MEM_ID		    U(0x02000202)
 #define QTI_SIP_SVC_PIL_AUTH_RESET_ID       U(0x02000205)
 #define QTI_SIP_SVC_PIL_UNLOCK_XPU_ID       U(0x02000206)
 #define QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID U(0x02000214)
@@ -88,6 +89,7 @@
 #define	QTI_SIP_SVC_VERSION_MINOR		U(0x0)
 #define SMC_ARMV8                             ULL(0x1)
 #define QTI_SIP_SVC_PIL_INIT_PARAM_ID             U(0x82)
+#define QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID		  U(0x3)
 #define QTI_SIP_SVC_PIL_AUTH_RESET_PARAM_ID       U(0x1)
 #define QTI_SIP_SVC_PIL_UNLOCK_XPU_PARAM_ID       U(0x1)
 #define QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_PARAM_ID U(0x1)
@@ -141,6 +143,7 @@ smc_id &= 0x3FFFFFFF;
                 case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
 #endif
 #ifdef QTI_5018_PLATFORM
+		case QTI_SIP_SVC_PIL_MEM_ID:
 		case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID:
@@ -340,6 +343,15 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 #endif
 
 #if QTI_5018_PLATFORM
+	case QTI_SIP_SVC_PIL_MEM_ID:
+                {
+                if(QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID == x1){
+                        SMC_RET2(handle, SMC_OK, qtiseclib_pil_mem(x2));
+                        }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+                }
+
 	case QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID:
 		{
 		if(QTI_SIP_SVC_PIL_USERPD1_BRINGUP_PARAM_ID == x1){
