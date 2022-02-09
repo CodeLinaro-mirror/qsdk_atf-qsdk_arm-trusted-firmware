@@ -32,28 +32,12 @@ func bl31_entrypoint
 	 * Stash the previous bootloader arguments x0 - x3 for later use.
 	 * ---------------------------------------------------------------
 	 */
+	ldr 	x2, =0x8605000
+	ldp	w0, w1, [x2]
 	mov	x20, x0
 	mov	x21, x1
 	mov	x22, x2
 	mov	x23, x3
-
-    /*SDI Check*/
-    /* Clear the upper 32 bits, sometimes it contains junk */
-    mov     x1, #0xffff
-    lsl     x1, x1, #0x10
-    orr     x1, x1, #0xffff
-    lsl     x1, x1, #0x20
-    bic     x0, x0, x1
-    /* Save X0,X1 and X30, since those registers will be clobbered*/
-    msr     TPIDR_EL0, x0
-    msr     TPIDR_EL1, x1
-    msr     TPIDRRO_EL0, x30
-    bl  qti_sysdbg_reset_check
-
-    /*Boot Remapping*/
-    ldr     x9, g_qti_bl31_cold_booted
-    cmp     x9, #1
-    beq     bl31_warm_entrypoint
 
 	/* --------------------------------------------------------------------
 	 * If PIE is enabled, fixup the Global descriptor Table and dynamic
@@ -165,7 +149,14 @@ endfunc bl31_entrypoint
 	 * warmboot entrypoint
 	 * --------------------------------------------------------------------
 	 */
-func bl31_warm_entrypoint
+func_in_section bl31_warm_entrypoint, QTI_IMEM_RESET_ENTRY
+
+	/* Save X0,X1 and X30, since those registers will be clobbered*/
+	msr     TPIDR_EL0, x0
+	msr     TPIDR_EL1, x1
+	msr     TPIDRRO_EL0, x30
+
+	bl	qti_sysdbg_reset_check
 
 #if ENABLE_RUNTIME_INSTRUMENTATION
 	/*

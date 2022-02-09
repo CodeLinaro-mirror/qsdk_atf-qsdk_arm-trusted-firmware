@@ -16,7 +16,7 @@
 /*----------------------------------------------------------------------------*/
 /* SOC_VERSION definitions */
 /*----------------------------------------------------------------------------*/
-#define QTI_A53_MIDR     0x51AF8014
+#define QTI_A53_MIDR     0x411FD090
 
 /*----------------------------------------------------------------------------*/
 
@@ -96,7 +96,7 @@
 #define PLAT_CLUSTER_COUNT       	1
 
 /* No. of cores in the FCM cluster */
-#define PLAT_CLUSTER0_CORE_COUNT	2
+#define PLAT_CLUSTER0_CORE_COUNT	4
 
 #define PLATFORM_CORE_COUNT		(PLAT_CLUSTER0_CORE_COUNT)
 
@@ -142,14 +142,13 @@
  * Put BL31 at DDR as per memory map. BL31_BASE is calculated using the
  * current BL31 debug size plus a little space for growth.
  */
-#define BL31_BASE						0x4AC00000
-/* Restricting Size to 256KB*/
-#define BL31_SIZE						0x40000
+#define BL31_BASE						0x4A600000
+#define BL31_SIZE						0x300000
 #define QTI_TRUSTED_MAILBOX_SIZE				0x1000
 #define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
 
-#define QTI_DIAG_RG_SIZE                       0x2000
-#define QTI_PIL_RG_SIZE			               0x1000
+#define QTI_DIAG_RG_SIZE                       0x3000
+#define QTI_PIL_RG_SIZE                                0x1000
 /*----------------------------------------------------------------------------*/
 /* Mailbox base address */
 /*----------------------------------------------------------------------------*/
