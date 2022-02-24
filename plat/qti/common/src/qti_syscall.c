@@ -45,7 +45,7 @@
 #define QTI_SIP_PROTECT_MEM_SUBSYS_ID           U(0x0200020C)
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
 
-#ifdef QTI_5018_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
 #endif
 /*
@@ -141,10 +141,10 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_PIL_AUTH_RESET_ID:
 		case QTI_SIP_SVC_PIL_UNLOCK_XPU_ID:
                 case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
+                case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 #endif
 #ifdef QTI_5018_PLATFORM
 		case QTI_SIP_SVC_PIL_MEM_ID:
-		case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID:
 		case QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID:
@@ -510,7 +510,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 			SMC_RET1(handle, SMC_UNK);
 		}
-#ifdef QTI_5018_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
 	case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		{
 			ret = qtiseclib_qfprom_fuse_secdat((uint32_t *)x2);

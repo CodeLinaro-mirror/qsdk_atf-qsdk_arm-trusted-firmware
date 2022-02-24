@@ -93,11 +93,11 @@ int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr);
 int qtiseclib_pil_auth_reset_ns(uint32_t proc);
 int qtiseclib_pil_unlock_area(uint32_t proc);
 int pil_wcss_break_start(bool dbg);
+int qtiseclib_qfprom_fuse_secdat(uint32_t *);
 #endif
 #if QTI_5018_PLATFORM
 int qtiseclib_pil_mem(uint32_t proc);
 int qtiseclib_bt_fuse_copy(void);
-int qtiseclib_qfprom_fuse_secdat(uint32_t *);
 int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 int qtiseclib_pil_userpd1_bringup(uint32_t proc);
 int qtiseclib_pil_userpd1_teardown(uint32_t proc);
