@@ -116,6 +116,18 @@ typedef enum qtiseclib_mmap_attr_s {
 	QTISECLIB_MAP_RW_XN_DATA = 3,
 } qtiseclib_mmap_attr_t;
 
+/*------------------------------------------------------------------------------
+ * Syscalls marked with RSP flag will be passed a ptr to
+ * this struct.
+ *
+ * A syscall cannot send more than three 4-byte values back to HLOS via registers.
+ * A syscall cannot return with more than 6 4-byte values back to TEE via registers.
+ * -------------------------------------------------------------------------*/
+typedef struct qti_smc_rsp_s {
+  uintptr_t rsp[6];              //Values to return to HLOS or TEE
+  uintptr_t return_to_tee;       //Indication to post an smc after the current smc has been handled and return to tee
+} qti_smc_rsp_t;
+
 typedef struct hlos_boot_params_s
 {
   uintptr_t el1_x0;
