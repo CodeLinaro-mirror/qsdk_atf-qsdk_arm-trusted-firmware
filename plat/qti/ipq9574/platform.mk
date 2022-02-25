@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-# Make for ipq6018 QTI platform.
+# Make for ipq9574 QTI platform.
 
 QTI_PLAT_PATH		:=	plat/qti
 CHIPSET			:=	${PLAT}
@@ -33,22 +33,17 @@ GICV2_G0_FOR_EL3               := 1
 # Enable stack protector.
 ENABLE_STACK_PROTECTOR := strong
 
-#IPQ6018 Boot Params
+#IPQ9574 Boot Params
 XBL_BOOT                       := 1
 $(eval $(call add_define,XBL_BOOT))
 
-#Used for Signed Board Debug
-#Set to 0 by Default
-SIGNED_BOOT_DBG                := 0
-$(eval $(call add_define,SIGNED_BOOT_DBG))
-
-#IPQ5018 Console Uart Prints
+#IPQ9574 Console Uart Prints
 #Set to 0 by Default to use Diag Ring Buffer
 QTI_UART_PRINT                       := 0
 $(eval $(call add_define,QTI_UART_PRINT))
 
-QTI_5018_PLATFORM             := 1
-$(eval $(call add_define,QTI_5018_PLATFORM))
+QTI_9574_PLATFORM             := 1
+$(eval $(call add_define,QTI_9574_PLATFORM))
 
 QTI_EXTERNAL_INCLUDES	:=	-I${QTI_PLAT_PATH}/${CHIPSET}/inc			\
 				-I${QTI_PLAT_PATH}/common/inc				\
