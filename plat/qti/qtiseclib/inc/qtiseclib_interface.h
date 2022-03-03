@@ -88,7 +88,7 @@ uint64_t qtiseclib_get_ddr_size();
 
 #if QTI_9574_PLATFORM
 bool TmeFuseApiRunTests(void);
-int qtiseclib_dpr_addr_send_tmel(uint32_t addr, qti_smc_rsp_t *rsp);
+int qtiseclib_dpr_addr_send_tmel(uint32_t addr);
 #endif
 
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM
