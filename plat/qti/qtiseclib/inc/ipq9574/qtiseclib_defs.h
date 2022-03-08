@@ -30,25 +30,26 @@ typedef uintptr_t u_register_t;
 
 /* Interrupt number/ID defs. TODO: Chipset specific.
    Need to be feature gurded with Chipset Macro. */
-#define QTISECLIB_INT_ID_SEC_WDOG_BARK			(0xD5)
-#define QTISECLIB_INT_ID_NON_SEC_WDOG_BITE		(0x24)
-#define QTISECLIB_INT_ID_RESET_SGI			(0xf)
-#define QTISECLIB_INT_ID_CPU_WAKEUP_SGI			(0x8)
+#define QTISECLIB_INT_ID_SEC_WDOG_BARK                  (0xD5)
+#define QTISECLIB_INT_ID_NON_SEC_WDOG_BITE              (0x24)
+#define QTISECLIB_INT_ID_RESET_SGI                      (0xf)
+#define QTISECLIB_INT_ID_CPU_WAKEUP_SGI                 (0x8)
 
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC		(0xE6)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC		(0xE7)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC		(0xE8)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC		(0xE9)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC             (0xE6)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC          (0xE7)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC             (0xE8)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC          (0xE9)
 
-#define QTISECLIB_INT_ID_XPU_SEC			(0xE3)
-#define QTISECLIB_INT_ID_XPU_NON_SEC			(0xE4)
+#define QTISECLIB_INT_ID_XPU_SEC                        (0xE3)
+#define QTISECLIB_INT_ID_XPU_NON_SEC                    (0xE4)
 
-#define QTISECLIB_INT_ID_MEM_NOC_ERROR			(0x71)
-#define QTISECLIB_INT_ID_SYSTEM_NOC_ERROR		(0xE1)
-#define QTISECLIB_INT_ID_PC_NOC_ERROR			(0xE2)
-#define QTISECLIB_INT_ID_AGGNOC_NOC_ERROR			(0x8E)
+#define QTISECLIB_INT_ID_MEM_NOC_ERROR                  (0x71)
+#define QTISECLIB_INT_ID_SYSTEM_NOC_ERROR               (0xE1)
+#define QTISECLIB_INT_ID_PC_NOC_ERROR                   (0xE2)
+#define QTISECLIB_INT_ID_AGGNOC_NOC_ERROR               (0x8E)
 #define QTISECLIB_INT_ID_AHB_TIMEOUT                    (0xE5)
-#define	QTISECLIB_INT_INVALID_INT_NUM			(0xFFFFFFFFU)
+#define QTISECLIB_INT_ID_TME_IPC                        (0x021E)
+#define QTISECLIB_INT_INVALID_INT_NUM                   (0xFFFFFFFFU)
 
 /* External CPU Dump Structure - 64 bit EL */
 typedef struct
@@ -115,6 +116,18 @@ typedef enum qtiseclib_mmap_attr_s {
 	QTISECLIB_MAP_RW_XN_NC_DATA = 2,
 	QTISECLIB_MAP_RW_XN_DATA = 3,
 } qtiseclib_mmap_attr_t;
+
+/*------------------------------------------------------------------------------
+ * Syscalls marked with RSP flag will be passed a ptr to
+ * this struct.
+ *
+ * A syscall cannot send more than three 4-byte values back to HLOS via registers.
+ * A syscall cannot return with more than 6 4-byte values back to TEE via registers.
+ * -------------------------------------------------------------------------*/
+typedef struct qti_smc_rsp_s {
+  uintptr_t rsp[6];              //Values to return to HLOS or TEE
+  uintptr_t return_to_tee;       //Indication to post an smc after the current smc has been handled and return to tee
+} qti_smc_rsp_t;
 
 typedef struct hlos_boot_params_s
 {

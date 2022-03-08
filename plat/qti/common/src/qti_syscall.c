@@ -44,8 +44,9 @@
 #define QTI_SIP_DO_HLOS_MODE_SWITCH             U(0x0200010F)
 #define QTI_SIP_PROTECT_MEM_SUBSYS_ID           U(0x0200020C)
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
+#define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
 
-#ifdef QTI_5018_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
 #endif
 /*
@@ -88,6 +89,7 @@
 #define QTI_SIP_SVC_VERSION_MAJOR		U(0x0)
 #define	QTI_SIP_SVC_VERSION_MINOR		U(0x0)
 #define SMC_ARMV8                             ULL(0x1)
+#define QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID         U(0x1)
 #define QTI_SIP_SVC_PIL_INIT_PARAM_ID             U(0x82)
 #define QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID		  U(0x3)
 #define QTI_SIP_SVC_PIL_AUTH_RESET_PARAM_ID       U(0x1)
@@ -141,10 +143,10 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_PIL_AUTH_RESET_ID:
 		case QTI_SIP_SVC_PIL_UNLOCK_XPU_ID:
                 case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
+                case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 #endif
 #ifdef QTI_5018_PLATFORM
 		case QTI_SIP_SVC_PIL_MEM_ID:
-		case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID:
 		case QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID:
@@ -405,7 +407,17 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
+#if QTI_9574_PLATFORM
+	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
+               {
+                       if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
+                               SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2,(qti_smc_rsp_t *)x3));
+                       }
+        else
+                        SMC_RET1(handle, SMC_UNK);
+               }
 
+#endif
 	case QTI_TEST_XPU_ERR_COUNT_ID:
 		{
 			SMC_RET1(handle, qtiseclib_test_get_xpu_err_count());
@@ -510,7 +522,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 			SMC_RET1(handle, SMC_UNK);
 		}
-#ifdef QTI_5018_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
 	case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		{
 			ret = qtiseclib_qfprom_fuse_secdat((uint32_t *)x2);
