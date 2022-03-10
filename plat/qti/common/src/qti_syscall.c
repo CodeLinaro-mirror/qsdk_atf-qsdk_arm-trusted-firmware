@@ -411,7 +411,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
                {
                        if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
-                               SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2,(qti_smc_rsp_t *)x3));
+                               SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2));
                        }
         else
                         SMC_RET1(handle, SMC_UNK);
