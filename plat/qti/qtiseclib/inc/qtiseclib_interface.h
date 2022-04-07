@@ -85,6 +85,7 @@ int qtiseclib_protect_mem_subsystem(uint32_t subsystem_id, uintptr_t phy_base, u
 int qtiseclib_clear_protect_mem_subsystem(uint32_t subsystem_id, uintptr_t phy_base, uint32_t size, uint32_t auth_key);
 int qtiseclib_get_diag(char* buf, size_t buf_size);
 uint64_t qtiseclib_get_ddr_size();
+int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 
 #if QTI_9574_PLATFORM
 bool TmeFuseApiRunTests(void);
@@ -102,7 +103,6 @@ int qtiseclib_qfprom_fuse_secdat(uint32_t *);
 #if QTI_5018_PLATFORM
 int qtiseclib_pil_mem(uint32_t proc);
 int qtiseclib_bt_fuse_copy(void);
-int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 int qtiseclib_pil_userpd1_bringup(uint32_t proc);
 int qtiseclib_pil_userpd1_teardown(uint32_t proc);
 int qtiseclib_pil_multipd_auth_ns(uint32_t proc, uint32_t prog_num, uint64_t dma_addr, uint32_t dma_size);

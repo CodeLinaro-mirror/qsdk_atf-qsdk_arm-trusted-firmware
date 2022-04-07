@@ -477,15 +477,9 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                 }
 	case QTI_SIP_SVC_AUTH_CHECK_ID:
 		{
-			if (QTI_SIP_SVC_AUTH_CHECK_PARAM_ID == x1){
-		#if QTI_5018_PLATFORM
+			if (QTI_SIP_SVC_AUTH_CHECK_PARAM_ID == x1) {
 				SMC_RET2(handle, SMC_OK, qtiseclib_secure_boot_check((char *)x2, x3));
-		#endif
-		#if QTI_6018_PLATFORM || QTI_9574_PLATFORM
-				*((volatile uint32_t *)x2) = 0;
-				SMC_RET2(handle, SMC_OK, SMC_OK);
-		#endif
-				}
+			}
 			SMC_RET1(handle, SMC_UNK);
 		}
 	case QTI_INFO_GET_DIAG_ID:
