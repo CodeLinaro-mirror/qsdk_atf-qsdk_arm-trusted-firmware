@@ -344,6 +344,31 @@ SECTIONS
     } >RAM
 #endif
 
+#if  QTI_9574_PLATFORM
+      /****************************************************************
+   *  SMMU S2 WAR PAGE TABLE BASE
+   *  Attrib.: RW, PXN=1, Uncacheable, PL1
+   *  Note: Each LEVEL PAGETABLE - 4KB:Total PAGE TABLE SIZE : 12KB , uncacheable region.
+   ****************************************************************/
+    smmu_war_pt_level1 (QTI_SMMU_S2_PAGE_TABLE_L1_START) : {
+     __SMMU_WAR_PT_L1_REGION_START__ = .;
+      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
+     __SMMU_WAR_PT_L1_REGION_END__ = .;
+    } >RAM
+
+    smmu_war_pt_level2 (QTI_SMMU_S2_PAGE_TABLE_L2_START) : {
+     __SMMU_WAR_PT_L2_REGION_START__ = .;
+      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
+     __SMMU_WAR_PT_L2_REGION_END__ = .;
+    } >RAM
+
+    smmu_war_pt_level2 (QTI_SMMU_S2_PAGE_TABLE_L3_START) : {
+     __SMMU_WAR_PT_L3_REGION_START__ = .;
+      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
+     __SMMU_WAR_PT_L3_REGION_END__ = .;
+    } >RAM
+#endif
+
     /*
      * Define a linker symbol to mark end of the RW memory area for this
      * image.

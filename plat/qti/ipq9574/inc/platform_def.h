@@ -158,6 +158,26 @@
 #define QTI_DIAG_RG_LIMIT               QTI_DIAG_RG_START + QTI_DIAG_RG_SIZE
 
 #define QTI_PIL_RG_SIZE			0x1000
+
+/*******************************************************************************
+ * SMMU S2 Page table Defines -
+ * SMMU WAR defines to prevent NULL access from Wi-Fi
+ ******************************************************************************/
+#define QTI_SMMU_S2_PAGE_TABLE_L1_START    QTI_DIAG_RG_LIMIT
+#define QTI_SMMU_S2_PAGE_TABLE_L1_SIZE     0x1000
+#define QTI_SMMU_S2_PAGE_TABLE_L2_START    QTI_SMMU_S2_PAGE_TABLE_L1_START + QTI_SMMU_S2_PAGE_TABLE_L1_SIZE
+#define QTI_SMMU_S2_PAGE_TABLE_L2_SIZE     0x1000
+#define QTI_SMMU_S2_PAGE_TABLE_L3_START    QTI_SMMU_S2_PAGE_TABLE_L2_START + QTI_SMMU_S2_PAGE_TABLE_L2_SIZE
+#define QTI_SMMU_S2_PAGE_TABLE_L3_SIZE     0x1000
+#define QTI_SMMU_S2_PAGE_TABLE_L3_END      QTI_SMMU_S2_PAGE_TABLE_L3_START + QTI_SMMU_S2_PAGE_TABLE_L3_SIZE
+
+#define QTI_SMMU_S2_PAGE_TABLE_SIZE	   0x1000
+#define QTI_SMMU_S2_TOTAL_PAGE_TABLE_SIZE  QTI_SMMU_S2_PAGE_TABLE_L3_END - QTI_SMMU_S2_PAGE_TABLE_L1_START
+
+#define QTI_SMMU_PT_RG_LIMIT               QTI_SMMU_S2_PAGE_TABLE_L3_END
+
+#define QTI_SMMU_PT_RG_XPU_LIMIT           QTI_SMMU_PT_RG_LIMIT - SCL_DDR_BASE
+
 /*----------------------------------------------------------------------------*/
 /* Mailbox base address */
 /*----------------------------------------------------------------------------*/
