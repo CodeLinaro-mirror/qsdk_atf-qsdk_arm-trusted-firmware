@@ -38,6 +38,7 @@
 
 #define QTI_SIP_IS_SMC_AVAILABLE_ID			U(0x02000601)
 #define QTI_INFO_GET_DIAG_ID			U(0x02000602)
+#define QTI_INFO_GET_SECURE_STATE			U(0x02000604)
 #define QTI_SIP_SVC_AUTH_CHECK_ID               U(0x02000807)
 #define QTI_DUMP_SET_CPU_CTX_BUF_ID             U(0x02000302)
 
@@ -128,6 +129,7 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_SECURE_IO_WRITE_ID:
 		case QTI_SIP_IS_SMC_AVAILABLE_ID:
 		case QTI_INFO_GET_DIAG_ID:
+		case QTI_INFO_GET_SECURE_STATE:
 		case QTI_SIP_SVC_AUTH_CHECK_ID:
 		case QTI_DUMP_SET_CPU_CTX_BUF_ID:
 		case QTI_SIP_DO_HLOS_MODE_SWITCH:
@@ -523,6 +525,10 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET2(handle, SMC_OK, ret);
 		}
 #endif
+	case QTI_INFO_GET_SECURE_STATE:
+		{
+			SMC_RET2(handle, SMC_OK, qtiseclib_get_secure_state());
+		}
  	default:
 		{
 			SMC_RET1(handle, SMC_UNK);

@@ -114,4 +114,5 @@ int qtiseclib_pil_cfg(uint32_t proc, uint32_t cfg);
 uint32_t qtiseclib_test_get_xpu_err_count(void);
 void qtiseclib_test_clear_xpu_err_count(void);
 int qti_test_stack_protection(void);
+uint32_t qtiseclib_get_secure_state(void);
 #endif /* __QTISECLIB_INTERFACE_H__ */
