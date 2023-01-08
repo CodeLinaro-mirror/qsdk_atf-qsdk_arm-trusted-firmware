@@ -19,7 +19,7 @@ typedef uintptr_t u_register_t;
 #endif
 
 #define QTISECLIB_PLAT_CLUSTER_COUNT	1
-#define QTISECLIB_PLAT_CORE_COUNT	2
+#define QTISECLIB_PLAT_CORE_COUNT	4
 
 /* Different Log Level supported in qtiseclib.
    TODO: Currently no filtering done on QTISECLIB logs. */

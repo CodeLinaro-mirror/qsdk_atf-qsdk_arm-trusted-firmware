@@ -101,7 +101,7 @@
 #define PLAT_CLUSTER_COUNT       	1
 
 /* No. of cores in the FCM cluster */
-#define PLAT_CLUSTER0_CORE_COUNT	2
+#define PLAT_CLUSTER0_CORE_COUNT	4
 
 #define PLATFORM_CORE_COUNT		(PLAT_CLUSTER0_CORE_COUNT)
 
@@ -149,7 +149,7 @@
  */
 #define BL31_BASE						0x4A600000
 /* Restricting Size to 256KB*/
-#define BL31_SIZE						0x40000
+#define BL31_SIZE						0x300000
 #define QTI_TRUSTED_MAILBOX_SIZE				0x1000
 #define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
 

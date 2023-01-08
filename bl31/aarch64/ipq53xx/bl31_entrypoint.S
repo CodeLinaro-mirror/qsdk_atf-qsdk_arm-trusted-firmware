@@ -121,11 +121,6 @@ func bl31_entrypoint
 	dsb sy
 	isb
 
-	/*Boot Remapping*/
-	ldr     x9, g_qti_bl31_cold_booted
-	cmp     x9, #1
-	beq     bl31_warm_entrypoint
-
 	/* --------------------------------------------------------------------
 	 * If PIE is enabled, fixup the Global descriptor Table and dynamic
 	 * relocations

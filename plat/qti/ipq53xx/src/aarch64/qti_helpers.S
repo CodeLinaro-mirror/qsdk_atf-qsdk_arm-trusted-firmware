@@ -121,7 +121,7 @@ endfunc	console_diag_putc
 #define RESIN_DEBUG_STATUS_CHECK_MASK	0x00000013
 #define TCSR_RESET_DEBUG_SW_ENTRY_BIT0_MASK 0x1
 
-func qti_sysdbg_reset_check
+func_in_section qti_sysdbg_reset_check, QTI_SYSDBG_IMEM_CODE
     /*GCC Check*/
 	movz    x0, #0x181, lsl #16
     add     x0, x0, #0x5000          /*#0x5000 is not a valid #bimm32, orr cannot be used here*/
