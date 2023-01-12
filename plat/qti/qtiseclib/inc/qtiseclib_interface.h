@@ -92,7 +92,7 @@ int qtiseclib_get_diag(char* buf, size_t buf_size);
 uint64_t qtiseclib_get_ddr_size();
 int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 
-#if QTI_9574_PLATFORM
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 bool TmeFuseApiRunTests(void);
 int qtiseclib_dpr_addr_send_tmel(uint32_t addr);
 #endif
@@ -102,7 +102,7 @@ void qtiseclib_get_smem_base_addr(uint64_t *addr, uint64_t *size);
 void qtiseclib_set_image_version(char *major, char *minor, char *atf_commit);
 #endif
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr);
 int qtiseclib_pil_auth_reset_ns(uint32_t proc);
 int qtiseclib_pil_unlock_area(uint32_t proc);
