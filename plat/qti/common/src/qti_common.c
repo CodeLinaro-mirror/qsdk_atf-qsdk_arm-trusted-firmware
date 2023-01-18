@@ -60,6 +60,8 @@ unsigned int plat_qti_my_cluster_pos(void)
 	return cluster_id;
 }
 
+#define STRINGIFY(s) #s
+#define FORM_STRING(s) STRINGIFY(s)
 /*
  * Set up the page tables for the generic and platform-specific memory regions.
  * The extents of the generic memory regions are specified by the function
@@ -79,6 +81,10 @@ void qti_setup_page_tables(uintptr_t total_base,
 {
 
 	static uint64_t total_ddr_size = 0;
+	uint64_t smem_base_pa = 0;
+	uint64_t smem_targ_pa = 0;
+	uint64_t smem_base_size = 0;
+	uint64_t smem_targ_size = 0;
 	/*
 	 * Map the entire RAM with appropriate memory attributes.
 	 * Subsequent mappings will adjust the attributes for specific regions.
@@ -92,6 +98,20 @@ void qti_setup_page_tables(uintptr_t total_base,
 	mmap_add_region(total_base, total_base,
 			total_size, MT_MEMORY | MT_RW | MT_SECURE);
 
+#if QTI_9574_PLATFORM
+	/* Get TCSR_BASE 0x1900000*/
+	/* Get WONCE0 0x193D000 */
+	/* Get WONCE1 0x193D004 */
+	qtiseclib_get_smem_targ_info(&smem_targ_pa, &smem_targ_size);
+	VERBOSE("smem targ info region: %p - %p\n",
+		(void *)smem_targ_pa, (void *)(smem_targ_pa + smem_targ_size));
+	qtiseclib_get_smem_base_addr(&smem_base_pa, &smem_base_size);
+	VERBOSE("smem region: %p - %p\n",
+		(void *)smem_base_pa, (void *)(smem_base_pa + smem_base_size));
+	mmap_add_region(smem_base_pa, smem_base_pa,
+			smem_base_size, MT_NON_CACHEABLE | MT_RW | MT_SECURE | MT_EXECUTE_NEVER);
+	qtiseclib_set_image_version(FORM_STRING(ATF_MAJOR), FORM_STRING(ATF_MINOR), FORM_STRING(ATF_COMMIT));
+#endif
 	/* Re-map the code section */
 	VERBOSE("Code region: %p - %p\n",
 		(void *)code_start, (void *)code_limit);

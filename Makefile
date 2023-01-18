@@ -67,6 +67,11 @@ CHECK_PATHS		:=	${ROOT_DIRS_TO_CHECK}			\
 # Process build options
 ################################################################################
 
+COMMIT=$(shell git rev-parse --short HEAD)
+$(eval $(call add_define_val,ATF_COMMIT,$(COMMIT)))
+$(eval $(call add_define_val,ATF_MAJOR,$(VERSION_MAJOR)))
+$(eval $(call add_define_val,ATF_MINOR,$(VERSION_MINOR)))
+
 # Verbose flag
 ifeq (${V},0)
         Q:=@
