@@ -81,10 +81,12 @@ void qti_setup_page_tables(uintptr_t total_base,
 {
 
 	static uint64_t total_ddr_size = 0;
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 	uint64_t smem_base_pa = 0;
 	uint64_t smem_targ_pa = 0;
 	uint64_t smem_base_size = 0;
 	uint64_t smem_targ_size = 0;
+#endif
 	/*
 	 * Map the entire RAM with appropriate memory attributes.
 	 * Subsequent mappings will adjust the attributes for specific regions.
@@ -98,10 +100,7 @@ void qti_setup_page_tables(uintptr_t total_base,
 	mmap_add_region(total_base, total_base,
 			total_size, MT_MEMORY | MT_RW | MT_SECURE);
 
-#if QTI_9574_PLATFORM
-	/* Get TCSR_BASE 0x1900000*/
-	/* Get WONCE0 0x193D000 */
-	/* Get WONCE1 0x193D004 */
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 	qtiseclib_get_smem_targ_info(&smem_targ_pa, &smem_targ_size);
 	VERBOSE("smem targ info region: %p - %p\n",
 		(void *)smem_targ_pa, (void *)(smem_targ_pa + smem_targ_size));
