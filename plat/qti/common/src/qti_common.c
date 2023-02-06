@@ -13,6 +13,7 @@
 #include <platform_def.h>
 #include <qtiseclib_interface.h>
 #include <qtiseclib_cb_interface.h>
+
 /*
  * Table of regions for various BL stages to map using the MMU.
  * This doesn't include TZRAM as the 'mem_layout' argument passed to
@@ -142,9 +143,12 @@ void qti_setup_page_tables(uintptr_t total_base,
 
 	/* Remap the region beyond BL31_END for making it accessible for any other secure operations */
 	if ((BL31_LIMIT > BL31_END) && (BL31_LIMIT - BL31_END) > 0) {
-	    mmap_add_region(BL31_END, BL31_END,
-			   (BL31_LIMIT - BL31_END),
+	    mmap_add_region(BL31_END, BL31_END, (BL31_LIMIT - BL31_END),
+#ifdef QTI_53XX_PLATFORM
+			    MT_DEVICE | MT_RW | MT_SECURE);
+#else
 			    MT_MEMORY | MT_RW | MT_SECURE);
+#endif
 	}
 	/* Now (re-)map the platform-specific memory regions */
 	mmap_add(plat_qti_mmap);

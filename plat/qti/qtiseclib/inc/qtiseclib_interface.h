@@ -102,8 +102,13 @@ void qtiseclib_get_smem_base_addr(uint64_t *addr, uint64_t *size);
 void qtiseclib_set_image_version(char *major, char *minor, char *atf_commit);
 #endif
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr);
+#elif QTI_53XX_PLATFORM
+int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr, uint32_t size);
+#endif
+
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 int qtiseclib_pil_auth_reset_ns(uint32_t proc);
 int qtiseclib_pil_unlock_area(uint32_t proc);
 int pil_wcss_break_start(bool dbg);

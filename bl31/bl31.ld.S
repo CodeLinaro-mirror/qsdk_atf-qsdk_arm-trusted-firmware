@@ -328,7 +328,7 @@ SECTIONS
     } >RAM
 #endif
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     pil . : {
      __PIL_REGION_START__ = .;
       . = . + QTI_PIL_RG_SIZE;
@@ -336,15 +336,17 @@ SECTIONS
     } >RAM
 #endif
 
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
     ASSERT(. < QTI_DIAG_RG_START, "PIL region is overlapping with DIAG region.")
 
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-      /****************************************************************
+  /****************************************************************
    *  TZOS Diag
    *  Attrib.: RW, PXN=1, Uncacheable, PL1
    *  Note: TZ Diag size is Cypress & Alder : 12KB Maple : 8KB, uncacheable region.
    ****************************************************************/
     diag (QTI_DIAG_RG_START) : {
+#elif QTI_53XX_PLATFORM
+    diag . : {
      __DIAG_REGION_START__ = .;
       . = . + QTI_DIAG_RG_SIZE;
      __DIAG_REGION_END__ = .;
@@ -382,6 +384,24 @@ SECTIONS
      */
     __RW_END__ = .;
     __BL31_END__ = .;
+
+#if QTI_53XX_PLATFORM
+    uncached_tmeipc : {
+     . = ALIGN(PAGE_SIZE);
+     __UNCACHED_TMEIPC_START__ = .;
+     KEEP(* (.uncached_tmeipc));
+     . = ALIGN(PAGE_SIZE);
+     __UNCACHED_TMEIPC_END__ = .;
+    }
+#endif
+
+/* #if QTI_53XX_PLATFORM
+    pil_heap (QTI_PIL_HEAP_REGION_START) : {
+     __PIL_HEAP_REGION_START__ = .;
+      . = . + QTI_PIL_HEAP_RG_SIZE;
+     __PIL_HEAP_REGION_END__ = .;
+    } >RAM
+#endif */
 
     ASSERT(. <= BL31_LIMIT, "BL31 image has exceeded its limit.")
 }
