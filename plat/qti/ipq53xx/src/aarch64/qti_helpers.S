@@ -119,10 +119,9 @@ endfunc	console_diag_putc
 
 #define SDI_DEBUG_STATUS_CHECK_MASK	0x00000028
 #define RESIN_DEBUG_STATUS_CHECK_MASK	0x00000013
-#define TCSR_RESET_DEBUG_SW_ENTRY_BIT0_MASK 0x1
+
 
 func_in_section qti_sysdbg_reset_check, QTI_SYSDBG_IMEM_CODE
-    /*GCC Check*/
 	movz    x0, #0x181, lsl #16
     add     x0, x0, #0x5000          /*#0x5000 is not a valid #bimm32, orr cannot be used here*/
     add     x0, x0, #0x8             /*add #0x5008 is not valid since exceeds #uimm12 that can be shifted*/
@@ -130,15 +129,10 @@ func_in_section qti_sysdbg_reset_check, QTI_SYSDBG_IMEM_CODE
     ldr     x0, =SDI_DEBUG_STATUS_CHECK_MASK
     and     x0, x0, x1
     cmp     x0, #0
-    b.eq    pass1_not_stared
-    /*SDI Bit Check*/
-    movz    x0, #0x194, lsl #16
-    ldr     x0, [x0]
-    and     x0, x0, #TCSR_RESET_DEBUG_SW_ENTRY_BIT0_MASK
+    b.ne    sysdbg_entry_handler
+    ldr     x0, =RESIN_DEBUG_STATUS_CHECK_MASK
+    and     x0, x0, x1
     cmp     x0, #0
-    b.eq    sysdbg_entry_handler        /* Preparation stage completed and PBL started the sdi pass#1 */
-
-pass1_not_stared:                   /* Preparation stage NOT completed and PBL not started the pass#1 */
+    b.ne    due_to_resin_tsen_reset
     ret
-
 endfunc qti_sysdbg_reset_check
