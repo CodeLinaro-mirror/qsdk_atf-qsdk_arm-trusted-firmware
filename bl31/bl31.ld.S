@@ -310,6 +310,9 @@ SECTIONS
      */
     coherent_ram (NOLOAD) : ALIGN(PAGE_SIZE) {
         __COHERENT_RAM_START__ = .;
+#if QTI_53XX_PLATFORM || QTI_9574_PLATFORM
+        *(.uncached_tmeipc)
+#endif
         /*
          * Bakery locks are stored in coherent memory
          *
@@ -345,6 +348,10 @@ SECTIONS
    *  Note: TZ Diag size is Cypress & Alder : 12KB Maple : 8KB, uncacheable region.
    ****************************************************************/
     diag (QTI_DIAG_RG_START) : {
+     __DIAG_REGION_START__ = .;
+      . = . + QTI_DIAG_RG_SIZE;
+     __DIAG_REGION_END__ = .;
+    } >RAM
 #elif QTI_53XX_PLATFORM
     diag . : {
      __DIAG_REGION_START__ = .;
@@ -384,24 +391,6 @@ SECTIONS
      */
     __RW_END__ = .;
     __BL31_END__ = .;
-
-#if QTI_53XX_PLATFORM
-    uncached_tmeipc : {
-     . = ALIGN(PAGE_SIZE);
-     __UNCACHED_TMEIPC_START__ = .;
-     KEEP(* (.uncached_tmeipc));
-     . = ALIGN(PAGE_SIZE);
-     __UNCACHED_TMEIPC_END__ = .;
-    }
-#endif
-
-/* #if QTI_53XX_PLATFORM
-    pil_heap (QTI_PIL_HEAP_REGION_START) : {
-     __PIL_HEAP_REGION_START__ = .;
-      . = . + QTI_PIL_HEAP_RG_SIZE;
-     __PIL_HEAP_REGION_END__ = .;
-    } >RAM
-#endif */
 
     ASSERT(. <= BL31_LIMIT, "BL31 image has exceeded its limit.")
 }

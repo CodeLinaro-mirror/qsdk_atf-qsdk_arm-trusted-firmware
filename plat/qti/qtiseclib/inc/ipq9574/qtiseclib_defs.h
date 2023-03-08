@@ -51,6 +51,15 @@ typedef uintptr_t u_register_t;
 #define QTISECLIB_INT_ID_TME_IPC                        (0x021E)
 #define QTISECLIB_INT_INVALID_INT_NUM                   (0xFFFFFFFFU)
 
+/*
+ * Put BL31 at DDR as per memory map. BL31_BASE is calculated using the
+ * current BL31 debug size plus a little space for growth.
+ */
+#define BL31_BASE						0x4A600000
+#define BL31_SIZE						0x300000
+#define QTI_TRUSTED_MAILBOX_SIZE				0x1000
+#define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
+
 /* External CPU Dump Structure - 64 bit EL */
 typedef struct
 {
