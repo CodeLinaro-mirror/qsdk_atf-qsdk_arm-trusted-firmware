@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <arch.h>
 #include <asm_macros.S>
@@ -14,6 +19,7 @@
 
 	.globl	zero_normalmem
 	.globl	zeromem
+	.globl	memcpy1
 	.globl	memcpy16
 
 	.globl	disable_mmu_el1
@@ -376,6 +382,24 @@ func zeromem_dczva
 	.unreq	tmp1
 	.unreq	tmp2
 endfunc zeromem_dczva
+
+/* --------------------------------------------------------------------------
+ * void memcpy1(void *dest, const void *src, unsigned int length)
+ *
+ * Copy length bytes from memory area src to memory area dest.
+ * The memory areas should not overlap.
+ * --------------------------------------------------------------------------
+ */
+func memcpy1
+/* copy 1 byte at a time */
+m_loop_byte:
+	cbz	x2, m_end
+	ldrb	w3, [x1], #1
+	strb	w3, [x0], #1
+	subs	x2, x2, #1
+	b.ne	m_loop_byte
+	ret
+endfunc memcpy1
 
 /* --------------------------------------------------------------------------
  * void memcpy16(void *dest, const void *src, unsigned int length)

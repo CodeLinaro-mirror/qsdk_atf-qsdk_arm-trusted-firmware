@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
+
 #include <platform_def.h>
 
 #include <lib/xlat_tables/xlat_tables_defs.h>
@@ -11,7 +18,7 @@
 OUTPUT_FORMAT(PLATFORM_LINKER_FORMAT)
 OUTPUT_ARCH(PLATFORM_LINKER_ARCH)
 ENTRY(bl31_entrypoint)
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 ENTRY(bl31_entrypoint_qti)
 #endif
 
@@ -26,7 +33,7 @@ MEMORY {
 
 SECTIONS
 {
-#if QTI_6018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_6018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 
     shared_imem_ro (QTI_SHARED_IMEM_RO_BASE) : {
 	   . = ALIGN(PAGE_SIZE);
@@ -331,7 +338,7 @@ SECTIONS
 
     ASSERT(. < QTI_DIAG_RG_START, "PIL region is overlapping with DIAG region.")
 
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
       /****************************************************************
    *  TZOS Diag
    *  Attrib.: RW, PXN=1, Uncacheable, PL1

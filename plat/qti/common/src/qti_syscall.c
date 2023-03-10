@@ -47,7 +47,7 @@
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
 
-#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
 #endif
 /*
@@ -409,7 +409,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
-#if QTI_9574_PLATFORM
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
                {
                        if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
@@ -518,7 +518,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 			SMC_RET1(handle, SMC_UNK);
 		}
-#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		{
 			ret = qtiseclib_qfprom_fuse_secdat((uint32_t *)x2);
