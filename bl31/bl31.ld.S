@@ -310,6 +310,9 @@ SECTIONS
      */
     coherent_ram (NOLOAD) : ALIGN(PAGE_SIZE) {
         __COHERENT_RAM_START__ = .;
+#if QTI_53XX_PLATFORM || QTI_9574_PLATFORM
+        *(.uncached_tmeipc)
+#endif
         /*
          * Bakery locks are stored in coherent memory
          *
@@ -328,7 +331,7 @@ SECTIONS
     } >RAM
 #endif
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     pil . : {
      __PIL_REGION_START__ = .;
       . = . + QTI_PIL_RG_SIZE;
@@ -336,15 +339,21 @@ SECTIONS
     } >RAM
 #endif
 
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
     ASSERT(. < QTI_DIAG_RG_START, "PIL region is overlapping with DIAG region.")
 
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-      /****************************************************************
+  /****************************************************************
    *  TZOS Diag
    *  Attrib.: RW, PXN=1, Uncacheable, PL1
    *  Note: TZ Diag size is Cypress & Alder : 12KB Maple : 8KB, uncacheable region.
    ****************************************************************/
     diag (QTI_DIAG_RG_START) : {
+     __DIAG_REGION_START__ = .;
+      . = . + QTI_DIAG_RG_SIZE;
+     __DIAG_REGION_END__ = .;
+    } >RAM
+#elif QTI_53XX_PLATFORM
+    diag . : {
      __DIAG_REGION_START__ = .;
       . = . + QTI_DIAG_RG_SIZE;
      __DIAG_REGION_END__ = .;
