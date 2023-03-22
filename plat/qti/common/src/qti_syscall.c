@@ -93,7 +93,11 @@
 #define QTI_SIP_SVC_VERSION_MAJOR		U(0x0)
 #define	QTI_SIP_SVC_VERSION_MINOR		U(0x0)
 #define SMC_ARMV8                             ULL(0x1)
+#ifdef QTI_53XX_PLATFORM
+#define QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID         U(0x2)
+#else
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID         U(0x1)
+#endif
 #define QTI_SIP_SVC_PIL_INIT_PARAM_ID             U(0x82)
 #define QTI_SIP_SVC_PIL_INITV2_PARAM_ID             U(0x83)
 #define QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID		  U(0x3)
@@ -431,7 +435,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
+#if QTI_9574_PLATFORM
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
                {
                        if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
@@ -440,7 +444,15 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         else
                         SMC_RET1(handle, SMC_UNK);
                }
-
+#elif QTI_53XX_PLATFORM
+	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
+        {
+                if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1) {
+                        SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2, (uint32_t) x3));
+                }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+        }
 #endif
 	case QTI_TEST_XPU_ERR_COUNT_ID:
 		{
