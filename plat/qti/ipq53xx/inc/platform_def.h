@@ -158,9 +158,9 @@
 /*
  * DIAG Start is placed 8K apart from __PIL_REGION_END__
  */
-// #define QTI_DIAG_RG_START               0x4A63B000
+#define QTI_DIAG_RG_START               0x4A669000
 #define QTI_DIAG_RG_SIZE                0x3000
-// #define QTI_DIAG_RG_LIMIT               QTI_DIAG_RG_START + QTI_DIAG_RG_SIZE
+#define QTI_DIAG_RG_LIMIT               QTI_DIAG_RG_START + QTI_DIAG_RG_SIZE
 
 #define QTI_PIL_RG_SIZE			0x1000
 #define QTI_PIL_HEAP_RG_SIZE		0x18000
