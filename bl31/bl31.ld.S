@@ -339,21 +339,15 @@ SECTIONS
     } >RAM
 #endif
 
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     ASSERT(. < QTI_DIAG_RG_START, "PIL region is overlapping with DIAG region.")
 
   /****************************************************************
    *  TZOS Diag
    *  Attrib.: RW, PXN=1, Uncacheable, PL1
-   *  Note: TZ Diag size is Cypress & Alder : 12KB Maple : 8KB, uncacheable region.
+   *  Note: TZ Diag size is Cypress & Alder & Miami : 12KB Maple : 8KB, uncacheable region.
    ****************************************************************/
     diag (QTI_DIAG_RG_START) : {
-     __DIAG_REGION_START__ = .;
-      . = . + QTI_DIAG_RG_SIZE;
-     __DIAG_REGION_END__ = .;
-    } >RAM
-#elif QTI_53XX_PLATFORM
-    diag . : {
      __DIAG_REGION_START__ = .;
       . = . + QTI_DIAG_RG_SIZE;
      __DIAG_REGION_END__ = .;
