@@ -47,7 +47,7 @@
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
 
-#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
 #endif
 /*
@@ -69,6 +69,9 @@
 #define QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID   U(0x02000217)
 #define QTI_SIP_SVC_PIL_USERPD1_TEARDOWN_ID  U(0x02000218)
 #define QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID   U(0x02000219)
+#ifdef QTI_53XX_PLATFORM
+#define QTI_SIP_SVC_PIL_INITV2_ID            U(0x0200021A)
+#endif
 #define QTI_SIP_SVC_PIL_CFG_ID                 U(0x02000220)
 #define QTI_SIP_SVC_BT_PIL_ECO_CFG_ID          U(0x02000221)
 
@@ -92,6 +95,7 @@
 #define SMC_ARMV8                             ULL(0x1)
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID         U(0x1)
 #define QTI_SIP_SVC_PIL_INIT_PARAM_ID             U(0x82)
+#define QTI_SIP_SVC_PIL_INITV2_PARAM_ID             U(0x83)
 #define QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID		  U(0x3)
 #define QTI_SIP_SVC_PIL_AUTH_RESET_PARAM_ID       U(0x1)
 #define QTI_SIP_SVC_PIL_UNLOCK_XPU_PARAM_ID       U(0x1)
@@ -142,12 +146,16 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_TEST_STACK_PROTECTION_ID:
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 		case QTI_SIP_SVC_PIL_INIT_ID:
+#elif QTI_53XX_PLATFORM
+		case QTI_SIP_SVC_PIL_INITV2_ID:
+#endif
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 		case QTI_SIP_SVC_PIL_AUTH_RESET_ID:
 		case QTI_SIP_SVC_PIL_UNLOCK_XPU_ID:
                 case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
                 case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 #endif
-#ifdef QTI_5018_PLATFORM
+#if QTI_5018_PLATFORM
 		case QTI_SIP_SVC_PIL_MEM_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_ID:
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID:
@@ -320,6 +328,18 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 		else
 			SMC_RET1(handle, SMC_UNK);
 		}
+#elif QTI_53XX_PLATFORM
+	case QTI_SIP_SVC_PIL_INITV2_ID:
+		{
+		if(QTI_SIP_SVC_PIL_INITV2_PARAM_ID == x1){
+			SMC_RET2(handle, SMC_OK, qtiseclib_pil_init_image_ns(x2, (void *)x3, (uint32_t)x4));
+			}
+		else
+			SMC_RET1(handle, SMC_UNK);
+		}
+#endif
+
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_SVC_PIL_AUTH_RESET_ID:
                 {
                 if(QTI_SIP_SVC_PIL_AUTH_RESET_PARAM_ID == x1){
@@ -400,6 +420,8 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 	else
 			SMC_RET1(handle, SMC_UNK);
 		}
+#endif
+#ifdef QTI_5018_PLATFORM
 	case QTI_SIP_SVC_BT_PIL_ECO_CFG_ID:
 		{
 		if(QTI_SIP_SVC_BT_PIL_ECO_CFG_PARAM_ID == x1){
@@ -409,7 +431,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
-#if QTI_9574_PLATFORM
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
                {
                        if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
@@ -518,7 +540,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 			SMC_RET1(handle, SMC_UNK);
 		}
-#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		{
 			ret = qtiseclib_qfprom_fuse_secdat((uint32_t *)x2);

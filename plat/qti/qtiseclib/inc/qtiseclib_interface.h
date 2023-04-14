@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #ifndef __QTISECLIB_INTERFACE_H__
 #define __QTISECLIB_INTERFACE_H__
@@ -63,7 +68,7 @@ int qtiseclib_mem_assign( u_register_t	IPAinfo_hyp,
 
 void qtiseclib_oem_register_wifi_interrupt(int irq);
 void qtiseclib_Clock_Init(void);
-#if !QTI_6018_PLATFORM && !QTI_5018_PLATFORM && !QTI_9574_PLATFORM
+#if !QTI_6018_PLATFORM && !QTI_5018_PLATFORM && !QTI_9574_PLATFORM && !QTI_53XX_PLATFORM
 void qtiseclib_oem_command_read(qtiseclib_oem_cmd_buf_t *cbuf);
 void qtiseclib_oem_command_write(qtiseclib_oem_cmd_buf_t *cbuf);
 #endif
@@ -87,7 +92,7 @@ int qtiseclib_get_diag(char* buf, size_t buf_size);
 uint64_t qtiseclib_get_ddr_size();
 int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 
-#if QTI_9574_PLATFORM
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 bool TmeFuseApiRunTests(void);
 int qtiseclib_dpr_addr_send_tmel(uint32_t addr);
 #endif
@@ -99,6 +104,11 @@ void qtiseclib_set_image_version(char *major, char *minor, char *atf_commit);
 
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr);
+#elif QTI_53XX_PLATFORM
+int qtiseclib_pil_init_image_ns(uint32_t proc, void * elf_hdr, uint32_t size);
+#endif
+
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 int qtiseclib_pil_auth_reset_ns(uint32_t proc);
 int qtiseclib_pil_unlock_area(uint32_t proc);
 int pil_wcss_break_start(bool dbg);

@@ -60,7 +60,7 @@ void qtiseclib_cb_get_ns_ctx(qtiseclib_dbg_a64_ctxt_regs_type *ns_ctx);
 int qtiseclib_cb_crash_console_init(void);
 int qtiseclib_cb_crash_console_flush(void);
 uintptr_t qti_page_align(uintptr_t value, unsigned dir);
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 int qtiseclib_qfprom_fuse_secdat(uint32_t*);
 #endif
 bool qtiseclib_is_overlap_atf_rg(unsigned long long addr, size_t size);

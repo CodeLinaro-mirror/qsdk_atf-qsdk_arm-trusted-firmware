@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #ifndef EL3_COMMON_MACROS_S
 #define EL3_COMMON_MACROS_S
@@ -250,7 +255,7 @@
 	 * Set the exception vectors.
 	 * ---------------------------------------------------------------------
 	 */
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	ldr	x0, =\_exception_vectors
 #else
 	adr	x0, \_exception_vectors
@@ -323,6 +328,8 @@
 		sub	x1, x1, x0
 		bl	inv_dcache_range
 #endif
+
+#ifndef QTI_53XX_PLATFORM
 		adrp	x0, __BSS_START__
 		add	x0, x0, :lo12:__BSS_START__
 
@@ -330,6 +337,7 @@
 		add	x1, x1, :lo12:__BSS_END__
 		sub	x1, x1, x0
 		bl	zeromem
+#endif
 
 #if USE_COHERENT_MEM
 		adrp	x0, __COHERENT_RAM_START__
