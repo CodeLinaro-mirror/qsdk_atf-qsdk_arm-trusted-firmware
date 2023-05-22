@@ -82,7 +82,7 @@ void qti_setup_page_tables(uintptr_t total_base,
 {
 
 	static uint64_t total_ddr_size = 0;
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	uint64_t smem_base_pa = 0;
 	uint64_t smem_targ_pa = 0;
 	uint64_t smem_base_size = 0;
@@ -101,7 +101,7 @@ void qti_setup_page_tables(uintptr_t total_base,
 	mmap_add_region(total_base, total_base,
 			total_size, MT_MEMORY | MT_RW | MT_SECURE);
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	qtiseclib_get_smem_targ_info(&smem_targ_pa, &smem_targ_size);
 	VERBOSE("smem targ info region: %p - %p\n",
 		(void *)smem_targ_pa, (void *)(smem_targ_pa + smem_targ_size));

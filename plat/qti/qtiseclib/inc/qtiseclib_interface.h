@@ -100,7 +100,7 @@ int qtiseclib_dpr_addr_send_tmel(uint32_t addr);
 #elif QTI_53XX_PLATFORM
 int qtiseclib_dpr_addr_send_tmel(uint32_t addr, uint32_t size);
 #endif
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 void qtiseclib_get_smem_targ_info(uint64_t *addr, uint64_t *size);
 void qtiseclib_get_smem_base_addr(uint64_t *addr, uint64_t *size);
 void qtiseclib_set_image_version(char *major, char *minor, char *atf_commit);
