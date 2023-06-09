@@ -60,6 +60,8 @@ typedef uintptr_t u_register_t;
 #define QTI_TRUSTED_MAILBOX_SIZE				0x1000
 #define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
 
+#define DCC_SRAM_BASE_ADDR	0x7900000
+#define DCC_SRAM_SIZE		0x40000
 /* External CPU Dump Structure - 64 bit EL */
 typedef struct
 {
