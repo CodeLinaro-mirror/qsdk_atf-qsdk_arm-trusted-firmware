@@ -57,6 +57,10 @@ typedef uintptr_t u_register_t;
 #define QTISECLIB_INT_ID_TME_IPC                        (0xEA)
 #define	QTISECLIB_INT_INVALID_INT_NUM			(0xFFFFFFFFU)
 
+
+#define DCC_SRAM_BASE_ADDR     0x4080000
+#define DCC_SRAM_SIZE          0x40000
+
 /* External CPU Dump Structure - 64 bit EL */
 typedef struct
 {

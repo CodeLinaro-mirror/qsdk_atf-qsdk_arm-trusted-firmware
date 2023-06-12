@@ -150,7 +150,7 @@ void qti_setup_page_tables(uintptr_t total_base,
 			    MT_MEMORY | MT_RW | MT_SECURE);
 #endif
 	}
-#if QTI_9574_PLATFORM
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	mmap_add_region(DCC_SRAM_BASE_ADDR, DCC_SRAM_BASE_ADDR,
 			DCC_SRAM_SIZE, MT_MEMORY | MT_RW | MT_SECURE);
 #endif
