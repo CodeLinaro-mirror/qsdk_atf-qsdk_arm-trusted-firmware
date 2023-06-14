@@ -134,4 +134,32 @@ uint32_t qtiseclib_test_get_xpu_err_count(void);
 void qtiseclib_test_clear_xpu_err_count(void);
 int qti_test_stack_protection(void);
 uint32_t qtiseclib_get_secure_state(void);
+
+#ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
+int32_t tmel_qwes_init_attestation(uint32_t m3EphPubKeyBuff,
+								   uint32_t m3EphPubKeyBuffsize,
+								   uint32_t *m3EphPubKeySize,
+								   void *rsp);
+int32_t tmel_qwes_get_attestation_report(uint32_t attestReqBuff,
+										 uint32_t attestReqBuffSize,
+										 uint32_t extClaimBuff,
+										 uint32_t extClaimBuffSize,
+										 uint32_t attestRespBuff,
+										 uint32_t attestRespBuffsize,
+										 uint32_t *attestRespSize,
+										 void *rsp);
+int32_t tmel_qwes_provision_device(uint32_t provReqBuff,
+								   uint32_t provReqBuffSize,
+								   uint32_t provRespBuff,
+								   uint32_t provRespBuffsize,
+								   uint32_t *provRespSize,
+								   void *rsp);
+int32_t tmel_qwes_bindings_check(uint32_t bindCheckReqBuff,
+								 uint32_t bindCheckReqBuffSize,
+								 uint32_t bindCheckRespBuff,
+								 uint32_t bindCheckRespBuffsize,
+								 uint32_t *bindCheckRespSize,
+								 void *rsp);
+#endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
+
 #endif /* __QTISECLIB_INTERFACE_H__ */

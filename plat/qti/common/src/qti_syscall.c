@@ -21,6 +21,8 @@
 #include <qtiseclib_interface.h>
 #include <lib/el3_runtime/context_mgmt.h>
 
+#include <qtiseclib_cb_interface.h>
+
 /*----------------------------------------------------------------------------
  * SIP service - SMC function IDs for SiP Service queries
  * -------------------------------------------------------------------------*/
@@ -110,6 +112,15 @@
 #define QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_PARAM_ID   U(0x204)
 #define QTI_SIP_SVC_PIL_CFG_PARAM_ID                 U(0x2)
 #define QTI_SIP_SVC_BT_PIL_ECO_CFG_PARAM_ID          U(0x2)
+
+#define QTI_SIP_QWES_INIT_ATTESTATION_ID	ULL(0x02001E01)
+#define QTI_SIP_QWES_INIT_ATTESTATION_PARAM_ID	U(0x203)
+
+#define QTI_SIP_QWES_GET_DEVICE_ATTESTATION_REPORT_ID	ULL(0x02001E02)
+#define QTI_SIP_GET_DEVICE_ATTESTATION_REPORT_PARAM_ID	U(0x20007)
+
+#define QTI_SIP_QWES_DEVICE_PROVISION_ID		ULL(0x02001E03)
+#define QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID	U(0x2005)
 
 #define	FUNCID_OEN_NUM_MASK  ((FUNCID_OEN_MASK << FUNCID_OEN_SHIFT)\
 				|(FUNCID_NUM_MASK << FUNCID_NUM_SHIFT) )
@@ -563,11 +574,49 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 		{
 			SMC_RET2(handle, SMC_OK, qtiseclib_get_secure_state());
 		}
- 	default:
-		{
-			SMC_RET1(handle, SMC_UNK);
-		}
-	}
+#ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
+    case QTI_SIP_QWES_INIT_ATTESTATION_ID:
+    {
+        QTISECLIB_CB_ERROR("x0 = 0%x, x1 = 0x%x, x2 = 0x%x, x3 = 0x%x, x4 = %p, handle = %p\n",
+                           l_smc_fid, (uint32_t) x1, (uint32_t) x2, (uint32_t) x3, (void *)x4, handle);
+        if (QTI_SIP_QWES_INIT_ATTESTATION_PARAM_ID == x1) {
+            SMC_RET1(handle, tmel_qwes_init_attestation((uint32_t)x2,
+                     (uint32_t)x3, (void *)x4, handle));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
+    case QTI_SIP_QWES_GET_DEVICE_ATTESTATION_REPORT_ID:
+    {
+        u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+        uint32_t x5 = (uint32_t) regs[0];
+        uint32_t x6 = (uint32_t) regs[1];
+        uint32_t x7 = (uint32_t) regs[2];
+        uint32_t *x8 = (uint32_t *) regs[3];
+        if (QTI_SIP_GET_DEVICE_ATTESTATION_REPORT_PARAM_ID == x1) {
+            SMC_RET1(handle, tmel_qwes_get_attestation_report((uint32_t)x2,
+                     (uint32_t)x3, (uint32_t)x4, x5, x6, x7, x8, handle));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
+    case QTI_SIP_QWES_DEVICE_PROVISION_ID:
+    {
+        u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+        uint32_t x5 = (uint32_t) regs[0];
+        uint32_t *x6 = (uint32_t *) regs[1];
+        if (QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID == x1) {
+            SMC_RET1(handle, tmel_qwes_provision_device((uint32_t)x2,
+                     (uint32_t)x3, (uint32_t)x4, x5, x6, handle));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
+#endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
+    default:
+    {
+        QTISECLIB_CB_ERROR("x0 = 0%x, x1 = 0x%p, x2 = 0x%p, x3 = 0x%p\n",
+                           l_smc_fid, (void *) x1, (void *) x2, (void *) x3);
+		SMC_RET1(handle, SMC_UNK);
+    }
+    }
 	return (uintptr_t) handle;
 }
 
