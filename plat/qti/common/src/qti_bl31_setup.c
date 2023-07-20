@@ -144,7 +144,10 @@ void qti_bl31_early_platform_setup(uint64_t from_bl2)
 	*/
 	qtiseclib_Clock_Init();
 #if !QTI_UART_PRINT
-	qti_diag_register(&g_qti_diag, __DIAG_REGION_START__);
+#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
+	if(!is_dload_magic_set())
+#endif
+		qti_diag_register(&g_qti_diag, __DIAG_REGION_START__);
 	qtiseclib_diag_init();
 #else
 	uart_init(UART_BASE, UART_CLK_IN_HZ, UART_BAUDRATE);

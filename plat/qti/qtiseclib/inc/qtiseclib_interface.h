@@ -94,6 +94,7 @@ int qtiseclib_secure_boot_check(char * secure_boot_val, uint32_t input_len);
 
 #if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 bool TmeFuseApiRunTests(void);
+bool is_dload_magic_set(void);
 #endif
 #if QTI_9574_PLATFORM
 int qtiseclib_dpr_addr_send_tmel(uint32_t addr);
