@@ -29,7 +29,7 @@ shared_imem_ro	PT_LOAD;
 shared_imem_rw	PT_LOAD;
 text	PT_LOAD;
 data	PT_LOAD;
-diag	PT_LOAD;
+diag	PT_NULL;
 }
 #endif
 
