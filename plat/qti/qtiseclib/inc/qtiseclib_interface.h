@@ -118,6 +118,7 @@ int qtiseclib_pil_auth_reset_ns(uint32_t proc);
 int qtiseclib_pil_unlock_area(uint32_t proc);
 int pil_wcss_break_start(bool dbg);
 int qtiseclib_qfprom_fuse_secdat(uint32_t *);
+int qtiseclib_get_feature_version(uint32_t feature_id);
 #endif
 
 #if QTI_5018_PLATFORM

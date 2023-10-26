@@ -51,6 +51,7 @@
 
 #if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
+#define QTI_GET_FEATURE_VERSION_ID		U(0x02000603)
 #endif
 /*
  * Syscall's to assigns a list of intermediate PAs from a
@@ -121,6 +122,9 @@
 
 #define QTI_SIP_QWES_DEVICE_PROVISION_ID		ULL(0x02001E03)
 #define QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID	U(0x2005)
+#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
+#define QTI_GET_FEATURE_VERSION_PARAM_ID	U(0x1)
+#endif
 
 #define	FUNCID_OEN_NUM_MASK  ((FUNCID_OEN_MASK << FUNCID_OEN_SHIFT)\
 				|(FUNCID_NUM_MASK << FUNCID_NUM_SHIFT) )
@@ -169,6 +173,7 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_PIL_UNLOCK_XPU_ID:
                 case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
                 case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
+                case QTI_GET_FEATURE_VERSION_ID:
 #endif
 #if QTI_5018_PLATFORM
 		case QTI_SIP_SVC_PIL_MEM_ID:
@@ -568,6 +573,14 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 		{
 			ret = qtiseclib_qfprom_fuse_secdat((uint32_t *)x2);
 			SMC_RET2(handle, SMC_OK, ret);
+		}
+	case QTI_GET_FEATURE_VERSION_ID:
+		{
+		        if (QTI_GET_FEATURE_VERSION_PARAM_ID == x1) {
+				ret = qtiseclib_get_feature_version(x2);
+				SMC_RET2(handle, SMC_OK, ret);
+			}
+			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
 	case QTI_INFO_GET_SECURE_STATE:
