@@ -137,6 +137,10 @@ void qtiseclib_test_clear_xpu_err_count(void);
 int qti_test_stack_protection(void);
 uint32_t qtiseclib_get_secure_state(void);
 
+#if QTI_53XX_PLATFORM
+int qtiseclib_read_tmel_fuse_multiple_rows(uint32_t *addr, uint32_t size);
+#endif
+
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
 int32_t tmel_qwes_init_attestation(uint32_t m3EphPubKeyBuff,
 								   uint32_t m3EphPubKeyBuffsize,

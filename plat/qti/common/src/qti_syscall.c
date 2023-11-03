@@ -4,6 +4,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -48,6 +53,9 @@
 #define QTI_SIP_PROTECT_MEM_SUBSYS_ID           U(0x0200020C)
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
+#if QTI_53XX_PLATFORM
+#define QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID    U(0x02000822)
+#endif
 
 #if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
@@ -101,6 +109,7 @@
 #else
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID         U(0x1)
 #endif
+#define QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_PARAM_ID   U(0x22)
 #define QTI_SIP_SVC_PIL_INIT_PARAM_ID             U(0x82)
 #define QTI_SIP_SVC_PIL_INITV2_PARAM_ID             U(0x83)
 #define QTI_SIP_SVC_PIL_MEM_ID_PARAM_ID		  U(0x3)
@@ -181,6 +190,9 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_PIL_MULTIPD_MEMCPY_V2_ID:
 		case QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID:
 		case QTI_SIP_SVC_PIL_USERPD1_TEARDOWN_ID:
+#endif
+#if QTI_53XX_PLATFORM
+		case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
 #endif
 			return true;
 		default:
@@ -465,6 +477,14 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         {
                 if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1) {
                         SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2, (uint32_t) x3));
+                }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+        }
+	case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
+        {
+                if (QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_PARAM_ID == x1) {
+                        SMC_RET2(handle, SMC_OK, qtiseclib_read_tmel_fuse_multiple_rows((uint32_t *)x2, (uint32_t) x3));
                 }
                 else
                         SMC_RET1(handle, SMC_UNK);
