@@ -131,6 +131,9 @@
 
 #define QTI_SIP_QWES_DEVICE_PROVISION_ID		ULL(0x02001E03)
 #define QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID	U(0x2005)
+
+#define QTI_SIP_QWES_BINDINGS_CHECK_ID		ULL(0x02001E04)
+#define QTI_SIP_QWES_BINDINGS_CHECK_PARAM_ID	U(0x2005)
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_GET_FEATURE_VERSION_PARAM_ID	U(0x1)
 #endif
@@ -193,6 +196,12 @@ smc_id &= 0x3FFFFFFF;
 #endif
 #if QTI_53XX_PLATFORM
 		case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
+#endif
+#ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
+		case QTI_SIP_QWES_INIT_ATTESTATION_ID:
+		case QTI_SIP_QWES_GET_DEVICE_ATTESTATION_REPORT_ID:
+		case QTI_SIP_QWES_DEVICE_PROVISION_ID:
+		case QTI_SIP_QWES_BINDINGS_CHECK_ID:
 #endif
 			return true;
 		default:
@@ -638,6 +647,22 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         uint32_t *x6 = (uint32_t *) regs[1];
         if (QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID == x1) {
             SMC_RET1(handle, tmel_qwes_provision_device((uint32_t)x2,
+                     (uint32_t)x3, (uint32_t)x4, x5, x6, handle));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
+    case QTI_SIP_QWES_BINDINGS_CHECK_ID:
+    {
+        uint32_t *x6;
+        u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+        uint32_t x5 = (uint32_t) regs[0];
+        if (SMC_32 == GET_SMC_CC(smc_fid))
+            x6 = (uint32_t *) (regs[0] >> 32);
+        else
+            x6 = (uint32_t *) regs[1];
+
+        if (QTI_SIP_QWES_BINDINGS_CHECK_PARAM_ID == x1) {
+            SMC_RET1(handle, tmel_qwes_bindings_check((uint32_t)x2,
                      (uint32_t)x3, (uint32_t)x4, x5, x6, handle));
         }
         SMC_RET1(handle, SMC_UNK);
