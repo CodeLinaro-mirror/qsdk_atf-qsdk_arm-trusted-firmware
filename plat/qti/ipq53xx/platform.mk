@@ -47,6 +47,9 @@ $(eval $(call add_define,SIGNED_BOOT_DBG))
 QTI_UART_PRINT                       := 0
 $(eval $(call add_define,QTI_UART_PRINT))
 
+UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING	:=1
+$(eval $(call add_define,UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING))
+
 QTI_53XX_PLATFORM             := 1
 $(eval $(call add_define,QTI_53XX_PLATFORM))
 
