@@ -6,7 +6,7 @@
  */
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -629,11 +629,27 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
     }
     case QTI_SIP_QWES_GET_DEVICE_ATTESTATION_REPORT_ID:
     {
+        uint32_t x6, x7, *x8;
         u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
         uint32_t x5 = (uint32_t) regs[0];
-        uint32_t x6 = (uint32_t) regs[1];
-        uint32_t x7 = (uint32_t) regs[2];
-        uint32_t *x8 = (uint32_t *) regs[3];
+        if (SMC_32 == GET_SMC_CC(smc_fid)) {
+            /*
+             * In the case of 32 bit kernel SCM call registers
+             * x5 to x8 are still read as u_register_t. So regs[0]
+             * will have address of x5 in lower 32 bits and x6 in
+             * higher 32 bits. Similarly regs[1] will have
+             * address of x7 in lower 32 bits and x8 in
+             * higher 32 bits. Hence we do a right shift of
+             * 32 bits in regs[0] and regs[1] to get x6 and x8.
+             */
+            x6 = (uint32_t) (regs[0] >> 32);
+            x7 = (uint32_t) regs[1];
+            x8 = (uint32_t *) (regs[1] >> 32);
+        } else {
+            x6 = (uint32_t) regs[1];
+            x7 = (uint32_t) regs[2];
+            x8 = (uint32_t *) regs[3];
+        }
         if (QTI_SIP_GET_DEVICE_ATTESTATION_REPORT_PARAM_ID == x1) {
             SMC_RET1(handle, tmel_qwes_get_attestation_report((uint32_t)x2,
                      (uint32_t)x3, (uint32_t)x4, x5, x6, x7, x8, handle));
@@ -642,9 +658,13 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
     }
     case QTI_SIP_QWES_DEVICE_PROVISION_ID:
     {
+        uint32_t *x6;
         u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
         uint32_t x5 = (uint32_t) regs[0];
-        uint32_t *x6 = (uint32_t *) regs[1];
+        if (SMC_32 == GET_SMC_CC(smc_fid))
+            x6 = (uint32_t *) (regs[0] >> 32);
+        else
+            x6 = (uint32_t *) regs[1];
         if (QTI_SIP_QWES_DEVICE_PROVISION_PARAM_ID == x1) {
             SMC_RET1(handle, tmel_qwes_provision_device((uint32_t)x2,
                      (uint32_t)x3, (uint32_t)x4, x5, x6, handle));
