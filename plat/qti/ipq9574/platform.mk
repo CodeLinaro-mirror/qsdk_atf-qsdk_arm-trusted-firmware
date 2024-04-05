@@ -42,6 +42,9 @@ $(eval $(call add_define,XBL_BOOT))
 QTI_UART_PRINT                       := 0
 $(eval $(call add_define,QTI_UART_PRINT))
 
+UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING  :=1
+$(eval $(call add_define,UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING))
+
 QTI_9574_PLATFORM             := 1
 $(eval $(call add_define,QTI_9574_PLATFORM))
 
