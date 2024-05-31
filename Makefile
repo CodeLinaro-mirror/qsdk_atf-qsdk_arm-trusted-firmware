@@ -89,6 +89,12 @@ endif
 
 export Q ECHO
 
+# Process LM_PROFILE flag
+
+ifeq (${LM_PROFILE},1)
+$(eval $(call add_define_val,QTI_LM_PROFILE,1))
+endif
+
 # Process Debug flag
 $(eval $(call add_define,DEBUG))
 ifneq (${DEBUG}, 0)
