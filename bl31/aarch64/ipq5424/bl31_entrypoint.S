@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -74,52 +74,6 @@ func bl31_entrypoint
 	adr     x0, xbl_params
 	mov	x2, #0xB88 /* 0xB88 is sizeof(xbl_params) */
 	bl	memcpy1
-
-	/* Work around to ignore xBL Sec L2 TCM xPU access violation */
-	mov_imm x1, 0x106
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_CR
-	str w1, [x0]
-	dsb sy
-	isb
-
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_SCR
-	str w1, [x0]
-	dsb sy
-	isb
-
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_MCR
-	str w1, [x0]
-	dsb sy
-	isb
-
-	mov_imm x1, 0x0
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_SESRRESTORE
-	str w1, [x0]
-	dsb sy
-	isb
-
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_ESRRESTORE
-	str w1, [x0]
-	dsb sy
-	isb
-
-	mov_imm x0, APCS_MPU_AXI_CH_XPU_MESRRESTORE
-	str w1, [x0]
-	dsb sy
-	isb
-
-	/* Zero out xBL Sec image */
-	mov_imm x0, XBL_SEC_IMG_BASE
-	add x1, x0, XBL_SEC_IMG_SIZE
-	sub x1, x1, x0
-	bl zeromem
-
-	/* Disable L2 TCM */
-	mov_imm x0, APCS_ALIAS0_TCM_START_ADDR
-	mov_imm x1, 0x0
-	str w1, [x0]
-	dsb sy
-	isb
 
 	/* --------------------------------------------------------------------
 	 * If PIE is enabled, fixup the Global descriptor Table and dynamic

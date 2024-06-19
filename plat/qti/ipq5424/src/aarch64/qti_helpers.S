@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -129,10 +129,14 @@ func_in_section qti_sysdbg_reset_check, QTI_SYSDBG_IMEM_CODE
     ldr     x0, =SDI_DEBUG_STATUS_CHECK_MASK
     and     x0, x0, x1
     cmp     x0, #0
+#ifdef MARINA_BRINGUP
     b.ne    sysdbg_entry_handler
+#endif
     ldr     x0, =RESIN_DEBUG_STATUS_CHECK_MASK
     and     x0, x0, x1
     cmp     x0, #0
+#ifdef MARINA_BRINGUP
     b.ne    due_to_resin_tsen_reset
+#endif
     ret
 endfunc qti_sysdbg_reset_check

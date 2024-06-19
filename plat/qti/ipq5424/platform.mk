@@ -4,8 +4,13 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
+# Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+#
 
-# Make for ipq6018 QTI platform.
+
+# Make for ipq5424 QTI platform.
 
 QTI_PLAT_PATH		:=	plat/qti
 CHIPSET			:=	${PLAT}
@@ -60,7 +65,7 @@ QTI_EXTERNAL_INCLUDES	:=	-I${QTI_PLAT_PATH}/${CHIPSET}/inc			\
 				-I${QTI_PLAT_PATH}/qtiseclib/inc/${CHIPSET}			\
 
 QTI_BL31_SOURCES	:=	$(QTI_PLAT_PATH)/${CHIPSET}/src/$(ARCH)/qti_helpers.S	\
-				$(QTI_PLAT_PATH)/common/src/$(ARCH)/a53.S	\
+				$(QTI_PLAT_PATH)/common/src/$(ARCH)/a55.S	\
 				$(QTI_PLAT_PATH)/common/src/$(ARCH)/qti_a53.S \
 				$(QTI_PLAT_PATH)/common/src/qti_stack_protector.c	\
 				$(QTI_PLAT_PATH)/common/src/qti_common.c		\

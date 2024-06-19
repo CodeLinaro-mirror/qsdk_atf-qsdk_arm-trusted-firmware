@@ -3,6 +3,12 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 
 #include <arch.h>
 #include <asm_macros.S>
@@ -23,7 +29,9 @@
 func update_stack_protector_canary
 	/* Use x19 as it is callee-saved */
 	mov	x19, x30
+#ifdef MARINA_BRINGUP
 	bl	plat_get_stack_protector_canary
+#endif
 
 	/* Update the canary with the returned value */
 	adrp	x1,  __stack_chk_guard

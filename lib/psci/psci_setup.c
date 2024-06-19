@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <assert.h>
 #include <stddef.h>
@@ -216,8 +221,10 @@ int __init psci_setup(const psci_lib_args_t *lib_args)
 	 */
 	psci_set_pwr_domains_to_run(PLAT_MAX_PWR_LVL);
 
+#if MARINA_BRINGUP
 	(void) plat_setup_psci_ops((uintptr_t)lib_args->mailbox_ep,
 				   &psci_plat_pm_ops);
+
 	assert(psci_plat_pm_ops != NULL);
 
 	/*
@@ -259,7 +266,7 @@ int __init psci_setup(const psci_lib_args_t *lib_args)
 	psci_caps |=  define_psci_cap(PSCI_STAT_RESIDENCY_AARCH64);
 	psci_caps |=  define_psci_cap(PSCI_STAT_COUNT_AARCH64);
 #endif
-
+#endif
 	return 0;
 }
 

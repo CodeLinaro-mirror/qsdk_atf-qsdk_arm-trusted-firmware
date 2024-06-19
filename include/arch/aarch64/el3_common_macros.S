@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -270,7 +270,17 @@
 	 * ---------------------------------------------------------------------
 	 */
 	bl	reset_handler
-
+#if QTI_53XX_PLATFORM
+/* Function is added to initialize stack for sysini instruction */
+#if USE_COHERENT_MEM
+                adrp    x0, __COHERENT_RAM_START__
+                add     x0, x0, :lo12:__COHERENT_RAM_START__
+                adrp    x1, __COHERENT_RAM_END_UNALIGNED__
+                add     x1, x1, :lo12: __COHERENT_RAM_END_UNALIGNED__
+                sub     x1, x1, x0
+                bl      zeromem
+#endif
+#endif
 	el3_arch_init_common
 
 	.if \_secondary_cold_boot

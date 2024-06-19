@@ -4,6 +4,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <assert.h>
 #include <common/debug.h>
@@ -132,8 +137,10 @@ void bl31_early_platform_setup(qti_bl31_params_t * from_bl2,
 
 void qti_bl31_early_platform_setup(uint64_t from_bl2)
 {
+#if MARINA_BRINGUP
 #if !QTI_UART_PRINT
 	static qti_console_uart_t g_qti_diag;
+#endif
 #endif
 	qtiseclib_get_entrypoint_param(from_bl2, &bl33_image_ep_info);
 	SET_SECURITY_STATE(bl33_image_ep_info.h.attr, NON_SECURE);
@@ -142,6 +149,7 @@ void qti_bl31_early_platform_setup(uint64_t from_bl2)
 	Register ram region __DIAG_REGION_START__ as console to
 	log diagnostics messages.
 	*/
+#if MARINA_BRINGUP
 	qtiseclib_Clock_Init();
 #if !QTI_UART_PRINT
 #if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
@@ -151,6 +159,7 @@ void qti_bl31_early_platform_setup(uint64_t from_bl2)
 	qtiseclib_diag_init();
 #else
 	uart_init(UART_BASE, UART_CLK_IN_HZ, UART_BAUDRATE);
+#endif
 #endif
 }
 
@@ -170,6 +179,7 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  ******************************************************************************/
 void bl31_plat_arch_setup(void)
 {
+#if MARINA_BRINGUP
 	qti_setup_page_tables(BL31_BASE,
 			      BL31_END - BL31_BASE,
 			      BL31_CODE_BASE,
@@ -178,6 +188,7 @@ void bl31_plat_arch_setup(void)
 			      BL31_RO_DATA_LIMIT,
 			      BL_COHERENT_RAM_BASE, BL_COHERENT_RAM_END);
 	enable_mmu_el3(0);
+#endif
 }
 
 /*******************************************************************************
@@ -185,12 +196,18 @@ void bl31_plat_arch_setup(void)
  ******************************************************************************/
 void bl31_platform_setup(void)
 {
+#if MARINA_BRINGUP
 	/* Initialize the GIC driver, cpu and distributor interfaces */
 	plat_qti_gic_driver_init();
 	plat_qti_gic_init();
 	qti_interrupt_svc_init();
+#endif
 	qtiseclib_bl31_platform_setup();
-	g_qti_cpu_cntfrq = read_cntfrq_el0();
+#if MARINA_BRINGUP
+        g_qti_cpu_cntfrq = read_cntfrq_el0();
+#else
+        g_qti_cpu_cntfrq = 0x16E3600;
+#endif
 
 	/* set boot state to cold boot complete. */
 	g_qti_bl31_cold_booted = 0x1;

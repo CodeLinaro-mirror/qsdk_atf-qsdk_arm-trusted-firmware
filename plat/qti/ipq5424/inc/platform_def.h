@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 #ifndef __PLATFORM_DEF_H__
@@ -21,7 +21,7 @@
 /*----------------------------------------------------------------------------*/
 /* SOC_VERSION definitions */
 /*----------------------------------------------------------------------------*/
-#define QTI_A53_MIDR     0x51AF8014
+#define QTI_A55_MIDR     0x410FD050
 
 /*----------------------------------------------------------------------------*/
 
