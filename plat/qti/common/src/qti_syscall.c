@@ -4,8 +4,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
  * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
@@ -370,6 +371,8 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #elif QTI_53XX_PLATFORM
+
+#if MARINA_BRINGUP	
 	case QTI_SIP_SVC_PIL_INITV2_ID:
 		{
 		if(QTI_SIP_SVC_PIL_INITV2_PARAM_ID == x1){
@@ -379,8 +382,10 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
+#endif
 
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
+#if MARINA_BRINGUP 
 	case QTI_SIP_SVC_PIL_AUTH_RESET_ID:
                 {
                 if(QTI_SIP_SVC_PIL_AUTH_RESET_PARAM_ID == x1){
@@ -397,6 +402,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 		else
 			SMC_RET1(handle, SMC_UNK);
 	  }
+#endif
 	case QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_ID:
 		{
 		if(QTI_SIP_SVC_PIL_WCSS_BREAK_DEBUG_PARAM_ID == x1){
@@ -482,6 +488,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                         SMC_RET1(handle, SMC_UNK);
                }
 #elif QTI_53XX_PLATFORM
+#if MARINA_BRINGUP
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
         {
                 if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1) {
@@ -499,6 +506,9 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                         SMC_RET1(handle, SMC_UNK);
         }
 #endif
+#endif
+
+#if MARINA_BRINGUP
 	case QTI_TEST_XPU_ERR_COUNT_ID:
 		{
 			SMC_RET1(handle, qtiseclib_test_get_xpu_err_count());
@@ -508,6 +518,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			qtiseclib_test_clear_xpu_err_count();
 			SMC_RET1(handle, SMC_OK);
 		}
+#endif
 	case QTI_TEST_STACK_PROTECTION_ID:
 		{
 			SMC_RET1(handle, qti_test_stack_protection());
@@ -568,12 +579,14 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			ret = qtiseclib_get_diag((char *)x2, x3);
 			SMC_RET2(handle, SMC_OK, ret);
 		}
+#if MARINA_BRINGUP
 	case QTI_SIP_SVC_RESET_DEBUG_ID:
 		{
 			if ((QTI_SIP_SVC_RESET_DEBUG_PARAM_ID == x1))
 			    SMC_RET1(handle, qtiseclib_config_reset_debug(x2, x3));
 			SMC_RET1(handle, SMC_UNK);
 		}
+#endif
         case QTI_DUMP_SET_CPU_CTX_BUF_ID:
                 {
 			ret = qtiseclib_set_cpu_ctx_buf(x2, x3);
@@ -583,6 +596,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                 {
 			return qti_sip_hlos_mode_switch(handle, (hlos_boot_params_t *)x2);
                 }
+#if MARINA_BRINGUP		
 	case QTI_SIP_PROTECT_MEM_SUBSYS_ID:
 		{
 		        if (QTI_SIP_PROTECT_MEM_SUBSYS_ID_PARAM_ID == x1)
@@ -597,6 +611,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 			SMC_RET1(handle, SMC_UNK);
 		}
+#endif
 #if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	case QTI_SIP_BLOW_FUSE_SEC_DAT_ID:
 		{
@@ -617,6 +632,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET2(handle, SMC_OK, qtiseclib_get_secure_state());
 		}
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
+#if MARINA_BRINGUP
     case QTI_SIP_QWES_INIT_ATTESTATION_ID:
     {
         QTISECLIB_CB_ERROR("x0 = 0%x, x1 = 0x%x, x2 = 0x%x, x3 = 0x%x, x4 = %p, handle = %p\n",
@@ -687,6 +703,7 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         }
         SMC_RET1(handle, SMC_UNK);
     }
+#endif
 #endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
     default:
     {

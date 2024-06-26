@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #include <assert.h>
 #include <string.h>
 
@@ -806,11 +812,13 @@ void psci_warmboot_entrypoint(void)
 	 * of power management handler and perform the generic, architecture
 	 * and platform specific handling.
 	 */
+#if MARINA_BRINGUP
+	
 	if (psci_get_aff_info_state() == AFF_STATE_ON_PENDING)
 		psci_cpu_on_finish(cpu_idx, &state_info);
 	else
 		psci_cpu_suspend_finish(cpu_idx, &state_info);
-
+#endif
 	/*
 	 * Set the requested and target state of this CPU and all the higher
 	 * power domains which are ancestors of this CPU to run.

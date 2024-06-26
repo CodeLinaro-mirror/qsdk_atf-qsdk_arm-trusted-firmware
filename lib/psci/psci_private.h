@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #ifndef PSCI_PRIVATE_H
 #define PSCI_PRIVATE_H
 
@@ -227,12 +233,16 @@ static inline void psci_dsbish(void)
 
 static inline void psci_lock_get(non_cpu_pd_node_t *non_cpu_pd_node)
 {
+#if MARINA_BRINGUP	
 	bakery_lock_get(&psci_locks[non_cpu_pd_node->lock_index]);
+#endif
 }
 
 static inline void psci_lock_release(non_cpu_pd_node_t *non_cpu_pd_node)
 {
+#if MARINA_BRINGUP
 	bakery_lock_release(&psci_locks[non_cpu_pd_node->lock_index]);
+#endif
 }
 
 #endif /* HW_ASSISTED_COHERENCY */

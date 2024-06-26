@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #include <assert.h>
 #include <stdint.h>
 
@@ -41,6 +47,7 @@ static int32_t std_svc_setup(void)
 	 * PSCI is one of the specifications implemented as a Standard Service.
 	 * The `psci_setup()` also does EL3 architectural setup.
 	 */
+	
 	if (psci_setup((const psci_lib_args_t *)svc_arg) != PSCI_E_SUCCESS) {
 		ret = 1;
 	}
@@ -90,9 +97,12 @@ static uintptr_t std_svc_smc_handler(uint32_t smc_fid,
 		    PMF_CACHE_MAINT,
 		    get_cpu_data(cpu_data_pmf_ts[CPU_DATA_PMF_TS0_IDX]));
 #endif
-
+#if MARINA_BRINGUP
 		ret = psci_smc_handler(smc_fid, x1, x2, x3, x4,
 		    cookie, handle, flags);
+#else
+                ret = false;		
+#endif
 
 #if ENABLE_RUNTIME_INSTRUMENTATION
 		PMF_CAPTURE_TIMESTAMP(rt_instr_svc,
