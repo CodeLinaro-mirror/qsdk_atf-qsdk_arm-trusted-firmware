@@ -70,7 +70,7 @@ QTI_BL31_SOURCES	:=	$(QTI_PLAT_PATH)/${CHIPSET}/src/$(ARCH)/qti_helpers.S	\
 				$(QTI_PLAT_PATH)/common/src/qti_stack_protector.c	\
 				$(QTI_PLAT_PATH)/common/src/qti_common.c		\
 				$(QTI_PLAT_PATH)/common/src/qti_bl31_setup.c		\
-				$(QTI_PLAT_PATH)/common/src/qti_gic_v2.c		\
+				$(QTI_PLAT_PATH)/common/src/qti_gic_v3.c		\
 				$(QTI_PLAT_PATH)/common/src/qti_interrupt_svc.c		\
 				$(QTI_PLAT_PATH)/common/src/qti_syscall.c		\
 				$(QTI_PLAT_PATH)/common/src/qti_topology.c		\
@@ -79,7 +79,7 @@ QTI_BL31_SOURCES	:=	$(QTI_PLAT_PATH)/${CHIPSET}/src/$(ARCH)/qti_helpers.S	\
 
 
 PLAT_INCLUDES		:=	-Idrivers/arm/gic/common/				\
-				-Idrivers/arm/gic/v2/					\
+				-Idrivers/arm/gic/v3/					\
 				-Iinclude/plat/common/					\
 
 PLAT_INCLUDES		+=	${QTI_EXTERNAL_INCLUDES}
@@ -94,9 +94,10 @@ PSCI_SOURCES		:=	plat/common/plat_psci_common.c				\
 
 # GIC sources.
 GIC_SOURCES		:=	drivers/arm/gic/common/gic_common.c			\
-				drivers/arm/gic/v2/gicv2_main.c				\
-				drivers/arm/gic/v2/gicv2_helpers.c			\
-				plat/common/plat_gicv2.c				\
+				drivers/arm/gic/v3/gicv3_main.c				\
+				drivers/arm/gic/v3/gic600.c				\
+				drivers/arm/gic/v3/gicv3_helpers.c			\
+				plat/common/plat_gicv3.c				\
 
 
 CONSOLE_SOURCES		:=	drivers/console/aarch64/console.S			\

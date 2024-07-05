@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 /*
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -35,17 +35,17 @@ typedef uintptr_t u_register_t;
 
 /* Interrupt number/ID defs. TODO: Chipset specific.
    Need to be feature gurded with Chipset Macro. */
-#define QTISECLIB_INT_ID_SEC_WDOG_BARK			(0x15D)
-#define QTISECLIB_INT_ID_NON_SEC_WDOG_BITE		(0x24)
+#define QTISECLIB_INT_ID_SEC_WDOG_BARK			(0x36)
+#define QTISECLIB_INT_ID_NON_SEC_WDOG_BITE		(0x21)
 #define QTISECLIB_INT_ID_RESET_SGI			(0xf)
 #define QTISECLIB_INT_ID_CPU_WAKEUP_SGI			(0x8)
 
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC		(0x6E)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC		(0x6D)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC		(0x6C)
-#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC		(0x6B)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC		(0x1A6)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC		(0x1A7)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC		(0x1A8)
+#define QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC		(0x1A9)
 
-#define QTISECLIB_INT_ID_XPU_SEC			(0x68)
+#define QTISECLIB_INT_ID_XPU_SEC			(0x1A5)
 #define QTISECLIB_INT_ID_XPU_NON_SEC			(0x69)
 #define QTISECLIB_INT_ID_XPU_MSA			(0x6A)
 

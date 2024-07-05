@@ -4,6 +4,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <common/bl_common.h>
 #include <drivers/arm/gicv3.h>
@@ -22,17 +27,19 @@
 	INTR_PROP_DESC(QTISECLIB_INT_ID_SEC_WDOG_BARK, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
 			GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_NON_SEC_WDOG_BITE, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_LEVEL), \
+			GIC_INTR_CFG_LEVEL)
+
+#if MARINA_BRINGUP
+        /*INTR_PROP_DESC(QTISECLIB_INT_ID_XPU_SEC , GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
+                        GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CLT_SEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
-	INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
-	INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
+                        GIC_INTR_CFG_EDGE), \
+        INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CLT_NONSEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
+                        GIC_INTR_CFG_EDGE), \
+        INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CFG_SEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
+                        GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_VMIDMT_ERR_CFG_NONSEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
-	INTR_PROP_DESC(QTISECLIB_INT_ID_XPU_SEC , GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
+                        GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_XPU_NON_SEC, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
 			GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_A1_NOC_ERROR, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
@@ -48,8 +55,8 @@
 	INTR_PROP_DESC(QTISECLIB_INT_ID_SYSTEM_NOC_ERROR, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
 			GIC_INTR_CFG_EDGE), \
 	INTR_PROP_DESC(QTISECLIB_INT_ID_MMSS_NOC_ERROR, GIC_HIGHEST_SEC_PRIORITY, INTR_GROUP0, \
-			GIC_INTR_CFG_EDGE), \
-
+			GIC_INTR_CFG_EDGE), \*/
+#endif
 
 /* The GICv3 driver only needs to be initialized in EL3 */
 static uintptr_t rdistif_base_addrs[PLATFORM_CORE_COUNT];
@@ -61,7 +68,7 @@ static const interrupt_prop_t qti_interrupt_props[] = {
 
 const gicv3_driver_data_t qti_gic_data = {
 	.gicd_base = QTI_GICD_BASE,
-	.gicr_base = QTI_GICR_BASE,
+	.gicr_base = QTI_GICC_BASE,
 	.interrupt_props = qti_interrupt_props,
 	.interrupt_props_num = ARRAY_SIZE(qti_interrupt_props),
 	.rdistif_num = PLATFORM_CORE_COUNT,

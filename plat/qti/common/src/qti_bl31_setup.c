@@ -196,10 +196,10 @@ void bl31_plat_arch_setup(void)
  ******************************************************************************/
 void bl31_platform_setup(void)
 {
-#if MARINA_BRINGUP
 	/* Initialize the GIC driver, cpu and distributor interfaces */
 	plat_qti_gic_driver_init();
 	plat_qti_gic_init();
+#if MARINA_BRINGUP
 	qti_interrupt_svc_init();
 #endif
 	qtiseclib_bl31_platform_setup();
