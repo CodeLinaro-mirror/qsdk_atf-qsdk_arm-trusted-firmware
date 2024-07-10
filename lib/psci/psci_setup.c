@@ -221,7 +221,6 @@ int __init psci_setup(const psci_lib_args_t *lib_args)
 	 */
 	psci_set_pwr_domains_to_run(PLAT_MAX_PWR_LVL);
 
-#if MARINA_BRINGUP
 	(void) plat_setup_psci_ops((uintptr_t)lib_args->mailbox_ep,
 				   &psci_plat_pm_ops);
 
@@ -265,7 +264,6 @@ int __init psci_setup(const psci_lib_args_t *lib_args)
 #if ENABLE_PSCI_STAT
 	psci_caps |=  define_psci_cap(PSCI_STAT_RESIDENCY_AARCH64);
 	psci_caps |=  define_psci_cap(PSCI_STAT_COUNT_AARCH64);
-#endif
 #endif
 	return 0;
 }

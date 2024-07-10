@@ -269,7 +269,6 @@
 	 * invalidations etc.
 	 * ---------------------------------------------------------------------
 	 */
-	bl	reset_handler
 #if QTI_53XX_PLATFORM
 /* Function is added to initialize stack for sysini instruction */
 #if USE_COHERENT_MEM
@@ -281,6 +280,19 @@
                 bl      zeromem
 #endif
 #endif
+
+        msr     spsel, #0
+
+        /* ---------------------------------------------------------------------
+         * Allocate a stack whose memory will be marked as Normal-IS-WBWA when
+         * the MMU is enabled. There is no risk of reading stale stack memory
+         * after enabling the MMU as only the primary CPU is running at the
+         * moment.
+         * ---------------------------------------------------------------------
+         */
+        bl      plat_set_my_stack
+
+        bl      reset_handler
 	el3_arch_init_common
 
 	.if \_secondary_cold_boot

@@ -249,7 +249,9 @@ func_in_section bl31_warm_entrypoint, QTI_IMEM_RESET_ENTRY
 #else
 	mov	x0, #DISABLE_DCACHE
 #endif
+#if MARINA_BRINGUP
 	bl	bl31_plat_enable_mmu
+#endif
 
 	/* --------------------------------------------------------------------
 	 * Enable pointer authentication

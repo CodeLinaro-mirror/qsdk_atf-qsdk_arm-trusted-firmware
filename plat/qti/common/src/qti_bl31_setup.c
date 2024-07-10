@@ -201,11 +201,7 @@ void bl31_platform_setup(void)
 	plat_qti_gic_init();
 	qti_interrupt_svc_init();
 	qtiseclib_bl31_platform_setup();
-#if MARINA_BRINGUP
         g_qti_cpu_cntfrq = read_cntfrq_el0();
-#else
-        g_qti_cpu_cntfrq = 0x16E3600;
-#endif
 
 	/* set boot state to cold boot complete. */
 	g_qti_bl31_cold_booted = 0x1;

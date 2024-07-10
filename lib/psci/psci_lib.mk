@@ -10,7 +10,6 @@
 # SPDX-License-Identifier: BSD-3-Clause-Clear
 #
 
-#if MARINA_BRINGUP
 
 PSCI_LIB_SOURCES	:=	lib/el3_runtime/cpu_data_array.c	\
 				lib/el3_runtime/${ARCH}/cpu_data.S	\
@@ -21,7 +20,7 @@ PSCI_LIB_SOURCES	:=	lib/el3_runtime/cpu_data_array.c	\
 				lib/psci/${ARCH}/psci_helpers.S         \
 				lib/psci/psci_common.c                  \
 				lib/psci/psci_setup.c                   \
-				#lib/psci/psci_main.c                   \
+				lib/psci/psci_main.c                   \
 				lib/psci/psci_off.c			\
 				lib/psci/psci_on.c			\
 				lib/psci/psci_suspend.c			\

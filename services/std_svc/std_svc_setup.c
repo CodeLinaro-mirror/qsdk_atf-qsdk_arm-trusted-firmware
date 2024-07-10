@@ -97,12 +97,8 @@ static uintptr_t std_svc_smc_handler(uint32_t smc_fid,
 		    PMF_CACHE_MAINT,
 		    get_cpu_data(cpu_data_pmf_ts[CPU_DATA_PMF_TS0_IDX]));
 #endif
-#if MARINA_BRINGUP
 		ret = psci_smc_handler(smc_fid, x1, x2, x3, x4,
 		    cookie, handle, flags);
-#else
-                ret = false;		
-#endif
 
 #if ENABLE_RUNTIME_INSTRUMENTATION
 		PMF_CAPTURE_TIMESTAMP(rt_instr_svc,
