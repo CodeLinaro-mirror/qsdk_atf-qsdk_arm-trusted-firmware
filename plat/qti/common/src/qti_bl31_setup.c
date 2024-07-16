@@ -199,9 +199,7 @@ void bl31_platform_setup(void)
 	/* Initialize the GIC driver, cpu and distributor interfaces */
 	plat_qti_gic_driver_init();
 	plat_qti_gic_init();
-#if MARINA_BRINGUP
 	qti_interrupt_svc_init();
-#endif
 	qtiseclib_bl31_platform_setup();
 #if MARINA_BRINGUP
         g_qti_cpu_cntfrq = read_cntfrq_el0();
