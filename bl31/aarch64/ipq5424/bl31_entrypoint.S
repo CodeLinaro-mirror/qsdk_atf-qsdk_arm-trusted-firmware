@@ -61,6 +61,17 @@ func bl31_entrypoint
 	sub	x1, x1, x0
 	bl	zeromem
 
+	/* --------------------------------------------------------------------
+	 * Assume control of EL3 address space by first disabling the MMU.
+	 * Will re-enable later.
+	 * --------------------------------------------------------------------
+	 */
+        mrs     x0, SCTLR_EL3
+        mov     x1, #SCTLR_M_BIT
+        bic     x0, x0, x1
+        msr     SCTLR_EL3, x0
+        isb
+
 	/* Clear the upper 32 bits, sometimes it contains junk */
 	mov	x0, x20
 	mov     x1, #0xffff
