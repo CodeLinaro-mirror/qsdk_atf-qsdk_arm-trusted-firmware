@@ -147,8 +147,8 @@
  * Put BL31 at DDR as per memory map. BL31_BASE is calculated using the
  * current BL31 debug size plus a little space for growth.
  */
-#define BL31_BASE						0x8A600000
-#define BL31_SIZE						0x80000
+#define BL31_BASE						0x8A832000
+#define BL31_SIZE						0x7D000
 #define QTI_TRUSTED_MAILBOX_SIZE				0x1000
 #define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
 
@@ -158,7 +158,7 @@
 /*
  * DIAG Start is placed 8K apart from __PIL_REGION_END__
  */
-#define QTI_DIAG_RG_START               0x8A669000
+#define QTI_DIAG_RG_START               0x8A89B000
 #define QTI_DIAG_RG_SIZE                0x3000
 #define QTI_DIAG_RG_LIMIT               QTI_DIAG_RG_START + QTI_DIAG_RG_SIZE
 
