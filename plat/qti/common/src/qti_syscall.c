@@ -167,7 +167,9 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_INFO_GET_DIAG_ID:
 		case QTI_INFO_GET_SECURE_STATE:
 		case QTI_SIP_SVC_AUTH_CHECK_ID:
+#if MARINA_BRINGUP
 		case QTI_DUMP_SET_CPU_CTX_BUF_ID:
+#endif
 		case QTI_SIP_DO_HLOS_MODE_SWITCH:
 		case QTI_SIP_PROTECT_MEM_SUBSYS_ID:
 		case QTI_SIP_CLEAR_MEM_SUBSYS_ID:
@@ -586,12 +588,12 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			    SMC_RET1(handle, qtiseclib_config_reset_debug(x2, x3));
 			SMC_RET1(handle, SMC_UNK);
 		}
-#endif
         case QTI_DUMP_SET_CPU_CTX_BUF_ID:
                 {
 			ret = qtiseclib_set_cpu_ctx_buf(x2, x3);
                         SMC_RET2(handle, SMC_OK, ret);
                 }
+#endif
         case QTI_SIP_DO_HLOS_MODE_SWITCH:
                 {
 			return qti_sip_hlos_mode_switch(handle, (hlos_boot_params_t *)x2);
