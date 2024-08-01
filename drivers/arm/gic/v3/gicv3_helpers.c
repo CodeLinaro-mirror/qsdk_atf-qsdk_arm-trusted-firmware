@@ -282,7 +282,14 @@ void gicv3_rdistif_mark_core_awake(uintptr_t gicr_base)
 	 * The WAKER_PS_BIT should be changed to 0
 	 * only when WAKER_CA_BIT is 1.
 	 */
+#if !QTI_53XX_PLATFORM
+	/* In IPQ54xx, APPS PBL initializes GIC in core-0 for TMEL IPC usecase.
+	 * This results in WAKER_CA_BIT=0.
+	 * Removing the check on WAKER_CA_BIT for preventing hang.
+	 * TO-DO: FIXME_IPQ5424: Include this check to other cores except core0
+	 */
 	assert((gicr_read_waker(gicr_base) & WAKER_CA_BIT) != 0U);
+#endif
 
 	/* Mark the connected core as awake */
 	gicr_write_waker(gicr_base, gicr_read_waker(gicr_base) & ~WAKER_PS_BIT);
