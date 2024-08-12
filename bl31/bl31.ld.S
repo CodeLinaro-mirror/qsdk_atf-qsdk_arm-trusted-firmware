@@ -380,50 +380,6 @@ SECTIONS
     } >RAM
 #endif
 
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-    ASSERT(. < QTI_DIAG_RG_START, "PIL region is overlapping with DIAG region.")
-
-  /****************************************************************
-   *  TZOS Diag
-   *  Attrib.: RW, PXN=1, Uncacheable, PL1
-   *  Note: TZ Diag size is Cypress & Alder & Miami : 12KB Maple : 8KB, uncacheable region.
-   ****************************************************************/
-    diag (QTI_DIAG_RG_START) : {
-     __DIAG_REGION_START__ = .;
-      . = . + QTI_DIAG_RG_SIZE;
-     __DIAG_REGION_END__ = .;
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-    } >RAM :diag
-#else
-    } >RAM
-#endif
-#endif
-
-#if  QTI_9574_PLATFORM
-      /****************************************************************
-   *  SMMU S2 WAR PAGE TABLE BASE
-   *  Attrib.: RW, PXN=1, Uncacheable, PL1
-   *  Note: Each LEVEL PAGETABLE - 4KB:Total PAGE TABLE SIZE : 12KB , uncacheable region.
-   ****************************************************************/
-    smmu_war_pt_level1 (QTI_SMMU_S2_PAGE_TABLE_L1_START) : {
-     __SMMU_WAR_PT_L1_REGION_START__ = .;
-      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
-     __SMMU_WAR_PT_L1_REGION_END__ = .;
-    } >RAM
-
-    smmu_war_pt_level2 (QTI_SMMU_S2_PAGE_TABLE_L2_START) : {
-     __SMMU_WAR_PT_L2_REGION_START__ = .;
-      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
-     __SMMU_WAR_PT_L2_REGION_END__ = .;
-    } >RAM
-
-    smmu_war_pt_level2 (QTI_SMMU_S2_PAGE_TABLE_L3_START) : {
-     __SMMU_WAR_PT_L3_REGION_START__ = .;
-      . = . + QTI_SMMU_S2_PAGE_TABLE_SIZE;
-     __SMMU_WAR_PT_L3_REGION_END__ = .;
-    } >RAM
-#endif
-
     /*
      * Define a linker symbol to mark end of the RW memory area for this
      * image.
@@ -432,4 +388,15 @@ SECTIONS
     __BL31_END__ = .;
 
     ASSERT(. <= BL31_LIMIT, "BL31 image has exceeded its limit.")
+
+    /****************************************************************
+    *  TZOS Diag
+    *  Attrib.: RW, PXN=1, Uncacheable, PL1
+    *  Note: TZ Diag size in Marina : 12KB , placed in uncacheable OCIMEM region.
+    ****************************************************************/
+    diag (QTI_DIAG_RG_START) : {
+        __DIAG_REGION_START__ = .;
+        . = . + QTI_DIAG_RG_SIZE;
+        __DIAG_REGION_END__ = .;
+    } :diag
 }

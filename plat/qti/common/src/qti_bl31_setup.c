@@ -137,11 +137,11 @@ void bl31_early_platform_setup(qti_bl31_params_t * from_bl2,
 
 void qti_bl31_early_platform_setup(uint64_t from_bl2)
 {
-#if MARINA_BRINGUP
+
 #if !QTI_UART_PRINT
 	static qti_console_uart_t g_qti_diag;
 #endif
-#endif
+
 	qtiseclib_get_entrypoint_param(from_bl2, &bl33_image_ep_info);
 	SET_SECURITY_STATE(bl33_image_ep_info.h.attr, NON_SECURE);
 
@@ -151,15 +151,13 @@ void qti_bl31_early_platform_setup(uint64_t from_bl2)
 	*/
 #if MARINA_BRINGUP
 	qtiseclib_Clock_Init();
-#if !QTI_UART_PRINT
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-	if(!is_dload_magic_set())
 #endif
+#if !QTI_UART_PRINT
+	if(!is_dload_magic_set())
 		qti_diag_register(&g_qti_diag, __DIAG_REGION_START__);
 	qtiseclib_diag_init();
 #else
 	uart_init(UART_BASE, UART_CLK_IN_HZ, UART_BAUDRATE);
-#endif
 #endif
 }
 
