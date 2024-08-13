@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <assert.h>
 
@@ -282,7 +287,7 @@ void gicv3_rdistif_mark_core_awake(uintptr_t gicr_base)
 	 * The WAKER_PS_BIT should be changed to 0
 	 * only when WAKER_CA_BIT is 1.
 	 */
-#if !QTI_53XX_PLATFORM
+#if !QTI_5424_PLATFORM
 	/* In IPQ54xx, APPS PBL initializes GIC in core-0 for TMEL IPC usecase.
 	 * This results in WAKER_CA_BIT=0.
 	 * Removing the check on WAKER_CA_BIT for preventing hang.

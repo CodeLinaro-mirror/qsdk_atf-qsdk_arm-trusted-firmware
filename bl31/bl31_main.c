@@ -5,7 +5,7 @@
  */
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -143,7 +143,7 @@ void bl31_main(void)
 	 * corresponding to the desired security state after the next ERET.
 	 */
 	bl31_prepare_next_image_entry();
-#if !QTI_6018_PLATFORM && !QTI_5018_PLATFORM && !QTI_9574_PLATFORM && !QTI_53XX_PLATFORM
+#if !QTI_5424_PLATFORM
 	console_flush();
 	/*
 	 * Perform any platform specific runtime setup prior to cold boot exit

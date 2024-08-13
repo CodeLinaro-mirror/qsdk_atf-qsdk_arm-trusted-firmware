@@ -255,11 +255,7 @@
 	 * Set the exception vectors.
 	 * ---------------------------------------------------------------------
 	 */
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	ldr	x0, =\_exception_vectors
-#else
-	adr	x0, \_exception_vectors
-#endif
 	msr	vbar_el3, x0
 	isb
 
@@ -269,7 +265,6 @@
 	 * invalidations etc.
 	 * ---------------------------------------------------------------------
 	 */
-#if QTI_53XX_PLATFORM
 /* Function is added to initialize stack for sysini instruction */
 #if USE_COHERENT_MEM
                 adrp    x0, __COHERENT_RAM_START__
@@ -278,7 +273,6 @@
                 add     x1, x1, :lo12: __COHERENT_RAM_END_UNALIGNED__
                 sub     x1, x1, x0
                 bl      zeromem
-#endif
 #endif
 
         msr     spsel, #0
@@ -349,16 +343,6 @@
 		add	x1, x1, :lo12:__RW_END__
 		sub	x1, x1, x0
 		bl	inv_dcache_range
-#endif
-
-#ifndef QTI_53XX_PLATFORM
-		adrp	x0, __BSS_START__
-		add	x0, x0, :lo12:__BSS_START__
-
-		adrp	x1, __BSS_END__
-		add	x1, x1, :lo12:__BSS_END__
-		sub	x1, x1, x0
-		bl	zeromem
 #endif
 
 #if USE_COHERENT_MEM

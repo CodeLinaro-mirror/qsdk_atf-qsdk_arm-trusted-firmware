@@ -6,7 +6,7 @@
 
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -18,11 +18,8 @@
 OUTPUT_FORMAT(PLATFORM_LINKER_FORMAT)
 OUTPUT_ARCH(PLATFORM_LINKER_ARCH)
 ENTRY(bl31_entrypoint)
-#if QTI_6018_PLATFORM || QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 ENTRY(bl31_entrypoint_qti)
-#endif
 
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 PHDRS
 {
 shared_imem_ro	PT_LOAD;
@@ -31,7 +28,6 @@ text	PT_LOAD;
 data	PT_LOAD;
 diag	PT_NULL;
 }
-#endif
 
 MEMORY {
     RAM (rwx): ORIGIN = BL31_BASE, LENGTH = BL31_LIMIT - BL31_BASE
@@ -43,30 +39,20 @@ MEMORY {
 
 SECTIONS
 {
-#if QTI_6018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 
     shared_imem_ro (QTI_SHARED_IMEM_RO_BASE) : {
 	   . = ALIGN(PAGE_SIZE);
 	   KEEP(* (QTI_IMEM_RESET_ENTRY))
 	   KEEP(* (QTI_SYSDBG_IMEM_CODE))
            KEEP(*(.code_imem.QTISECLIB_IMEM_CODE))
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     }:shared_imem_ro
-#else
-    }
-#endif
     ASSERT(. <= (QTI_SHARED_IMEM_RO_BASE + QTI_SHARED_IMEM_RO_SIZE), "Shared IMEM RO region has exceeded its limit.")
 
     shared_imem_rw (QTI_SHARED_IMEM_RW_BASE):  {
 	   . = ALIGN(PAGE_SIZE);
 	   KEEP(* (.uncached_imem.QTI_SYSDBG_IMEM_DATA))
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     }:shared_imem_rw
-#else
-    }
-#endif
     ASSERT(. <= (QTI_SHARED_IMEM_RW_BASE +  QTI_SHARED_IMEM_RW_SIZE), "Shared IMEM RW region has exceeded its limit.")
-#endif
 
     . = BL31_BASE;
     ASSERT(. == ALIGN(PAGE_SIZE),
@@ -80,16 +66,10 @@ SECTIONS
         *bl31_entrypoint.o(.text*)
         *(.text*)
         *(.vectors)
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
         *(sysini)
-#endif
         . = ALIGN(PAGE_SIZE);
         __TEXT_END__ = .;
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     } >RAM :text
-#else
-    } >RAM
-#endif
 
     .rodata . : {
         __RODATA_START__ = ALIGN(PAGE_SIZE);
@@ -134,11 +114,7 @@ SECTIONS
 
         . = ALIGN(PAGE_SIZE);
         __RODATA_END__ = .;
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     } >RAM :data
-#else
-    } >RAM
-#endif
 #else
     ro . : {
         __RO_START__ = ALIGN(PAGE_SIZE);
@@ -237,11 +213,7 @@ SECTIONS
         __DATA_START__ = .;
         *(.data*)
         __DATA_END__ = .;
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     } >RAM :data
-#else
-    } >RAM
-#endif
 
     /*
      * .rela.dyn needs to come after .data for the read-elf utility to parse
@@ -258,11 +230,7 @@ SECTIONS
     ASSERT(. <= BL31_PROGBITS_LIMIT, "BL31 progbits has exceeded its limit.")
 #endif
 
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     stacks . (NOLOAD) : {
-#else
-    stacks (NOLOAD) : {
-#endif
         __STACKS_START__ = .;
         *(tzfw_normal_stacks)
         __STACKS_END__ = .;
@@ -273,11 +241,7 @@ SECTIONS
      * Its base address should be 16-byte aligned for better performance of the
      * zero-initialization code.
      */
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
     .bss . (NOLOAD) : ALIGN(16) {
-#else
-    .bss (NOLOAD) : ALIGN(16) {
-#endif
         __BSS_START__ = .;
         *(.bss*)
         *(COMMON)
@@ -351,9 +315,7 @@ SECTIONS
      */
     coherent_ram (NOLOAD) : ALIGN(PAGE_SIZE) {
         __COHERENT_RAM_START__ = .;
-#if QTI_53XX_PLATFORM || QTI_9574_PLATFORM
         *(.uncached_tmeipc)
-#endif
         /*
          * Bakery locks are stored in coherent memory
          *
@@ -369,14 +331,6 @@ SECTIONS
          */
         . = ALIGN(PAGE_SIZE);
         __COHERENT_RAM_END__ = .;
-    } >RAM
-#endif
-
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
-    pil . : {
-     __PIL_REGION_START__ = .;
-      . = . + QTI_PIL_RG_SIZE;
-     __PIL_REGION_END__ = .;
     } >RAM
 #endif
 
