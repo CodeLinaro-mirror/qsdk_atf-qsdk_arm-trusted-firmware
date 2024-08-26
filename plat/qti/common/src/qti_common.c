@@ -4,7 +4,6 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
  /*
  * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
  * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
@@ -89,12 +88,10 @@ void qti_setup_page_tables(uintptr_t total_base,
 {
 
 	static uint64_t total_ddr_size = 0;
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	uint64_t smem_base_pa = 0;
 	uint64_t smem_targ_pa = 0;
 	uint64_t smem_base_size = 0;
 	uint64_t smem_targ_size = 0;
-#endif
 	/*
 	 * Map the entire RAM with appropriate memory attributes.
 	 * Subsequent mappings will adjust the attributes for specific regions.
@@ -108,7 +105,6 @@ void qti_setup_page_tables(uintptr_t total_base,
 	mmap_add_region(total_base, total_base,
 			total_size, MT_MEMORY | MT_RW | MT_SECURE);
 
-#if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	qtiseclib_get_smem_targ_info(&smem_targ_pa, &smem_targ_size);
 	VERBOSE("smem targ info region: %p - %p\n",
 		(void *)smem_targ_pa, (void *)(smem_targ_pa + smem_targ_size));
@@ -118,7 +114,6 @@ void qti_setup_page_tables(uintptr_t total_base,
 	mmap_add_region(smem_base_pa, smem_base_pa,
 			smem_base_size, MT_NON_CACHEABLE | MT_RW | MT_SECURE | MT_EXECUTE_NEVER);
 	qtiseclib_set_image_version(FORM_STRING(ATF_MAJOR), FORM_STRING(ATF_MINOR), FORM_STRING(ATF_COMMIT));
-#endif
 	/* Re-map the code section */
 	VERBOSE("Code region: %p - %p\n",
 		(void *)code_start, (void *)code_limit);
@@ -151,16 +146,10 @@ void qti_setup_page_tables(uintptr_t total_base,
 	/* Remap the region beyond BL31_END for making it accessible for any other secure operations */
 	if ((BL31_LIMIT > BL31_END) && (BL31_LIMIT - BL31_END) > 0) {
 	    mmap_add_region(BL31_END, BL31_END, (BL31_LIMIT - BL31_END),
-#ifdef QTI_53XX_PLATFORM
-			    MT_DEVICE | MT_RW | MT_SECURE);
-#else
 			    MT_MEMORY | MT_RW | MT_SECURE);
-#endif
 	}
-#if QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 	mmap_add_region(DCC_SRAM_BASE_ADDR, DCC_SRAM_BASE_ADDR,
 			DCC_SRAM_SIZE, MT_MEMORY | MT_RW | MT_SECURE);
-#endif
 	/* Now (re-)map the platform-specific memory regions */
 	mmap_add(plat_qti_mmap);
 

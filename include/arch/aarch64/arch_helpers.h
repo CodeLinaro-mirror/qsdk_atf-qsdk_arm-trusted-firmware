@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #ifndef ARCH_HELPERS_H
 #define ARCH_HELPERS_H
@@ -217,6 +222,9 @@ void inv_dcache_range(uintptr_t addr, size_t size);
 
 void dcsw_op_louis(u_register_t op_type);
 void dcsw_op_all(u_register_t op_type);
+void dcsw_op_level1(u_register_t op_type);
+void dcsw_op_level2(u_register_t op_type);
+void dcsw_op_level3(u_register_t op_type);
 
 void disable_mmu_el1(void);
 void disable_mmu_el3(void);

@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #ifndef __QTISECLIB_CB_INTERFACE_H__
 #define __QTISECLIB_CB_INTERFACE_H__
@@ -44,6 +49,9 @@ void qtiseclib_cb_tlbialle3(void);
 
 void qtiseclib_cb_flush_dcache_range(uintptr_t addr, size_t size);
 void qtiseclib_cb_flush_dcache_all(void);
+void qtiseclib_cb_flush_dcache_level1(void);
+void qtiseclib_cb_flush_dcache_level2(void);
+void qtiseclib_cb_flush_dcache_level3(void);
 
 int qtiseclib_cb_mmap_remove_dynamic_region(uintptr_t base_va, size_t size);
 

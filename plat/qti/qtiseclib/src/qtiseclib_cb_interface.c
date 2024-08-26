@@ -3,6 +3,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
  /*
  * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
@@ -152,6 +157,21 @@ void qtiseclib_cb_flush_dcache_range(uintptr_t addr, size_t size)
 void qtiseclib_cb_flush_dcache_all(void)
 {
 	dcsw_op_all(DCCISW);
+}
+
+void qtiseclib_cb_flush_dcache_level1(void)
+{
+	dcsw_op_level1(DCCISW);
+}
+
+void qtiseclib_cb_flush_dcache_level2(void)
+{
+	dcsw_op_level2(DCCISW);
+}
+
+void qtiseclib_cb_flush_dcache_level3(void)
+{
+	dcsw_op_level3(DCCISW);
 }
 
 void qtiseclib_cb_tlbialle3(void)

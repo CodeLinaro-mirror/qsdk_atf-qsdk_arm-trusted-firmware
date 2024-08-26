@@ -83,7 +83,7 @@ func bl31_entrypoint
 	/* Populate xbl_params using bootloader passed parameters */
 	mov	x1, x0
 	adr     x0, xbl_params
-	mov	x2, #0xB88 /* 0xB88 is sizeof(xbl_params) */
+	mov	x2, #0x1AC0 /* 0x1AC0 is sizeof(xbl_params) */
 	bl	memcpy1
 
 	/* --------------------------------------------------------------------
