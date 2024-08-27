@@ -105,6 +105,10 @@ void qtiseclib_test_clear_xpu_err_count(void);
 int qti_test_stack_protection(void);
 uint32_t qtiseclib_get_secure_state(void);
 
+void mon_configure_clusterthreadsid_for_nsworld(bool is_reserved_cpu_core);
+void mon_configure_clusterthreadsid_for_secureworld(void);
+void mon_configure_clusterbusqos(void);
+
 int qtiseclib_read_tmel_fuse_multiple_rows(uint32_t *addr, uint32_t size);
 
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING

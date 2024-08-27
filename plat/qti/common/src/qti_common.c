@@ -4,6 +4,13 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
+ /*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #include <stdbool.h>
 #include <common/debug.h>
 #include <assert.h>
@@ -182,4 +189,38 @@ int qti_mmap_remove_dynamic_region(uintptr_t base_va, size_t size)
 	base_va = qti_page_align(base_va, DOWN);
 	size = qti_page_align(size, UP);
 	return mmap_remove_dynamic_region(base_va, size);
+}
+
+/**
+ * Helper function to configure clusterbusqos
+ * @param [in] void
+ * @return void.
+ */
+void qti_configure_clusterbusqos(void)
+{
+        return mon_configure_clusterbusqos();
+}
+
+/**
+ * Helper function to configure Scheme ID for ARM Cores when entering secure world
+ * @param [in] void
+ * @return void.
+ */
+void qti_configure_clusterthreadsid_secworld(void)
+{
+        return mon_configure_clusterthreadsid_for_secureworld();
+}
+
+/**
+ * Helper function to configure Scheme ID for ARM Cores when jumping to NS world/cold init
+ * @param [in] void
+ * @return void.
+ */
+void qti_configure_clusterthreadsid_nsworld(void)
+{
+        uint32_t cpu_num;
+
+        cpu_num = ((qtiseclib_cb_plat_my_core_pos()) % QTISECLIB_PLAT_CORE_COUNT);
+
+        return mon_configure_clusterthreadsid_for_nsworld( ((cpu_num == 3u) ? true : false) );
 }

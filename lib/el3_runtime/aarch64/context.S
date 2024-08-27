@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+ /*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #include <arch.h>
 #include <asm_macros.S>
 #include <context.h>
@@ -489,6 +495,9 @@ func el3_exit
 	 * switch to SP_EL3
 	 * -----------------------------------------------------
 	 */
+        /* Configure SID for Non-Secure World before exit from secure world */
+        bl      qti_configure_clusterthreadsid_nsworld
+
 	mov	x17, sp
 	msr	spsel, #1
 	str	x17, [sp, #CTX_EL3STATE_OFFSET + CTX_RUNTIME_SP]

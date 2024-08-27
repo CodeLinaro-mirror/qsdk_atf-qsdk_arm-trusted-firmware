@@ -140,3 +140,52 @@ func_in_section qti_sysdbg_reset_check, QTI_SYSDBG_IMEM_CODE
 #endif
     ret
 endfunc qti_sysdbg_reset_check
+
+/*--------------------------------------------------------------------
+* Configure CLUSTERBUSQOS_EL1 as 0x120 during cold/warm boot of the ARM cores
+*--------------------------------------------------------------------*/
+    .global mon_configure_clusterbusqos
+.type mon_configure_clusterbusqos,%function
+mon_configure_clusterbusqos:
+    mov     x0, xzr   /* Iniliaize CHI bus QoS field for scheme IDs 0-7 as 0 */
+    orr     x0, x0, #0x00000100  /* Set CHI bus QoS field for scheme ID 2 (Bits 4-7) as 1 */
+    orr     x0, x0, #0x00000020  /* Set CHI bus QoS field for scheme ID 1 (Bits 0-3) as 2. */
+    msr     s3_0_c15_c4_4, x0  /* Write x0 into CLUSTERBUSQOS_EL1. */
+//    mrs     x1, s3_0_c15_c4_4  /* Read CLUSTERBUSQOS_EL1 into x1 for testing */
+    ret
+
+/*--------------------------------------------------------------------
+* When jumping to NS World (NS = 1),
+* Configure CLUSTERTHREADSID_EL1 as 0x0 for cores 0,1,2 (USED_CPU_CORES).
+* Configure CLUSTERTHREADSID_EL1 as 0x1 for core 3 (RESERVED_CPU_CORE).
+* void mon_configure_clusterthreadsid_for_nsworld(is_reserved_cpu_core)
+*--------------------------------------------------------------------*/
+    .global mon_configure_clusterthreadsid_for_nsworld
+.type mon_configure_clusterthreadsid_for_nsworld,%function
+mon_configure_clusterthreadsid_for_nsworld:
+    cmp     x0, 0x1  /* check if curr cpu is reserved cpu core */
+    beq     reserved_core_config_scid
+    mov     x0, xzr  /* set scheme ID as 0x0 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
+    msr     s3_0_c15_c4_0, x0  /* Write x0 into CLUSTERTHREADSID_EL1 */
+//    mrs     x1, s3_0_c15_c4_0  /* Read CLUSTERTHREADSID_EL1 into x1 for testing */
+    ret
+reserved_core_config_scid:
+    mov     x0, xzr ;
+    orr     x0, x0, #0x1  /* set scheme ID as 0x1 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
+    msr     s3_0_c15_c4_0, x0  /* Write x0 into CLUSTERTHREADSID_EL1 */
+//    mrs     x1, s3_0_c15_c4_0  /* Read CLUSTERTHREADSID_EL1 into x1 for testing */
+    ret
+
+/*--------------------------------------------------------------------
+* When entering to Secure World (NS = 0),
+* Configure CLUSTERTHREADSID_EL1 as 0x2 for all cores.
+* void mon_configure_clusterthreadsid_for_secureworld(void)
+*--------------------------------------------------------------------*/
+    .global mon_configure_clusterthreadsid_for_secureworld
+.type mon_configure_clusterthreadsid_for_secureworld,%function
+mon_configure_clusterthreadsid_for_secureworld:
+    mov     x6, xzr ;
+    orr     x6, x6, #0x2  /* set scheme ID as 0x2 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
+    msr     s3_0_c15_c4_0, x6  /* Write x6 into CLUSTERTHREADSID_EL1 */
+//    mrs     x5, s3_0_c15_c4_0  /*Read CLUSTERTHREADSID_EL1 into x5 for testing */
+    ret

@@ -6,7 +6,7 @@
  */
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -54,5 +54,9 @@ unsigned int plat_qti_my_cluster_pos(void);
 
 void gic_set_spi_routing(unsigned int id, unsigned int irm,
                u_register_t mpidr);
+
+void qti_configure_clusterbusqos(void);
+void qti_configure_clusterthreadsid_secworld(void);
+void qti_configure_clusterthreadsid_nsworld(void);
 
 #endif /* __PLAT_QTI_H__ */

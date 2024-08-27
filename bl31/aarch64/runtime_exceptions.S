@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
 #include <platform_def.h>
 
 #include <arch.h>
@@ -122,6 +128,9 @@
 	.macro	handle_interrupt_exception label
 
 	bl	save_gp_registers
+
+        /* Configure SID for Secure World */
+        bl	qti_configure_clusterthreadsid_secworld
 
 	/* Save ARMv8.3-PAuth registers and load firmware key */
 #if CTX_INCLUDE_PAUTH_REGS
@@ -334,6 +343,9 @@ smc_handler64:
 
 	/* Save general purpose registers */
 	bl	save_gp_registers
+
+        /* Configure SID for Secure World */
+        bl	qti_configure_clusterthreadsid_secworld
 
 	/* Save ARMv8.3-PAuth registers and load firmware key */
 #if CTX_INCLUDE_PAUTH_REGS
