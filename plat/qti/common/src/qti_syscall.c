@@ -140,7 +140,12 @@
 
 #define	FUNCID_OEN_NUM_MASK  ((FUNCID_OEN_MASK << FUNCID_OEN_SHIFT)\
 				|(FUNCID_NUM_MASK << FUNCID_NUM_SHIFT) )
-
+#ifdef QTI_53XX_PLATFORM
+#define QTI_SIP_IRONG_REG_READ_ID		ULL(0x02000222)
+#define QTI_SIP_IRONG_REG_WRITE_ID		ULL(0x02000223)
+#define QTI_SIP_IRONG_REG_READ_PARAM_ID		U(0x1)
+#define QTI_SIP_IRONG_REG_WRITE_PARAM_ID	U(0x2)
+#endif
 /* QTI SiP Service UUID */
 DEFINE_SVC_UUID2(qti_sip_svc_uid,
 		0x43864748, 0x217f, 0x41ad, 0xaa, 0x5a,
@@ -196,6 +201,8 @@ smc_id &= 0x3FFFFFFF;
 #endif
 #if QTI_53XX_PLATFORM
 		case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
+		case QTI_SIP_IRONG_REG_READ_ID:
+		case QTI_SIP_IRONG_REG_WRITE_ID:
 #endif
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
 		case QTI_SIP_QWES_INIT_ATTESTATION_ID:
@@ -688,6 +695,24 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         SMC_RET1(handle, SMC_UNK);
     }
 #endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
+#ifdef QTI_53XX_PLATFORM
+    case QTI_SIP_IRONG_REG_READ_ID:
+    {
+	if (QTI_SIP_IRONG_REG_READ_PARAM_ID == x1) {
+		SMC_RET2(handle, SMC_OK, qtiseclib_irong_wcss_read((uint32_t)x2, handle));
+	}
+	else
+		SMC_RET1(handle, SMC_UNK);
+    }
+    case QTI_SIP_IRONG_REG_WRITE_ID:
+    {
+	if (QTI_SIP_IRONG_REG_WRITE_PARAM_ID == x1){
+		SMC_RET2(handle, SMC_OK, qtiseclib_irong_wcss_write((uint32_t)x2, (uint32_t)x3));
+	}
+	else
+		SMC_RET1(handle, SMC_UNK);
+    }
+#endif
     default:
     {
         QTISECLIB_CB_ERROR("x0 = 0%x, x1 = 0x%p, x2 = 0x%p, x3 = 0x%p\n",
