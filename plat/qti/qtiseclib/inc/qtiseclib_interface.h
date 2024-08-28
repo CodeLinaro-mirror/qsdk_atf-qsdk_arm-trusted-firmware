@@ -5,7 +5,7 @@
  */
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023,2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -139,6 +139,8 @@ uint32_t qtiseclib_get_secure_state(void);
 
 #if QTI_53XX_PLATFORM
 int qtiseclib_read_tmel_fuse_multiple_rows(uint32_t *addr, uint32_t size);
+int qtiseclib_irong_wcss_read(uint32_t addr, void *rsp);
+int qtiseclib_irong_wcss_write(uint32_t addr, uint32_t val);
 #endif
 
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
