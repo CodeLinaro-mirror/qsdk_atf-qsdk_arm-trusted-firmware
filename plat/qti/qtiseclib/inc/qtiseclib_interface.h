@@ -147,6 +147,9 @@ int secbootlib_kernel_auth(uintptr_t kernel_load_addr);
 int secbootlib_sec_img_auth(uint32_t sw_type, uint32_t img_size, uintptr_t img_addr);
 int secbootlib_sec_img_auth_multi_segment_hash(uint32_t  elfAddr, uint32_t buffSize, uint32_t sec_img_id, uintptr_t reg, uint32_t regbufsize, uintptr_t hash_addr, uint32_t hash_size);
 #endif
+#if QTI_9574_PLATFORM
+int qtiseclib_read_tmel_fuse(uint32_t *addr, uint32_t size);
+#endif
 
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
 int32_t tmel_qwes_init_attestation(uint32_t m3EphPubKeyBuff,

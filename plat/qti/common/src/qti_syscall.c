@@ -56,6 +56,9 @@
 #define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
 #if QTI_53XX_PLATFORM
 #define QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID    U(0x02000822)
+#else
+#define QTI_SIP_TMEL_FUSE_READ_ID		ULL(0x02000822)
+#define QTI_SIP_TMEL_FUSE_READ_PARAM_ID		U(0x22)
 #endif
 
 #if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
@@ -569,6 +572,15 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         else
                         SMC_RET1(handle, SMC_UNK);
                }
+	case QTI_SIP_TMEL_FUSE_READ_ID:
+	{
+		if (QTI_SIP_TMEL_FUSE_READ_PARAM_ID == x1) {
+			SMC_RET2(handle, SMC_OK, qtiseclib_read_tmel_fuse(
+						(uint32_t *)x2, (uint32_t) x3));
+		}
+		else
+			SMC_RET1(handle, SMC_UNK);
+	}
 #elif QTI_53XX_PLATFORM
 	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
         {
