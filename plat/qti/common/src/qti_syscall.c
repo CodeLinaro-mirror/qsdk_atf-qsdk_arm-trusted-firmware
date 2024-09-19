@@ -69,6 +69,13 @@
 #define	QTI_SIP_SVC_MEM_ASSIGN_ID			U(0x02000C16)
 #define	QTI_SIP_SVC_RESET_DEBUG_ID				U(0x02000109)
 
+/* Syscall for Secure Auth */
+#define QTI_SIP_SECURE_AUTH_ID			U(0x0200011F)
+#define QTI_SIP_SECURE_AUTH_PARAM_ID		U(0x00000405)
+/* Syscall for Verify rootFS Hash */
+#define QTI_SIP_VERIFY_FS_HASH_ID		U(0x02000123)
+#define QTI_SIP_VERIFY_FS_HASH_PARAM_ID		U(0x00000885)
+
 /*
  * Syscall for PIL
  */
@@ -206,6 +213,8 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_QWES_DEVICE_PROVISION_ID:
 		case QTI_SIP_QWES_BINDINGS_CHECK_ID:
 #endif
+		case QTI_SIP_SECURE_AUTH_ID:
+		case QTI_SIP_VERIFY_FS_HASH_ID:
 			return true;
 		default:
 			return false;
@@ -707,6 +716,38 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
     }
 #endif
 #endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
+    case QTI_SIP_SECURE_AUTH_ID:
+    {
+        uint32_t x5, x6;
+        u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+        x5 = (uint32_t) regs[0];
+        if (SMC_32 == GET_SMC_CC(smc_fid)) {
+            x6 = (uint32_t) (regs[0] >> 32);
+        } else {
+            x6 = (uint32_t) regs[1];
+        }
+        if (QTI_SIP_SECURE_AUTH_PARAM_ID == x1) {
+            SMC_RET1(handle, sec_img_auth_using_tme_l((uint32_t)x2,
+                     (uint32_t)x3, (uint32_t)x4, (uint32_t *)(uintptr_t)x5, x6, handle));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
+    case QTI_SIP_VERIFY_FS_HASH_ID:
+    {
+        uint32_t x5, x6;
+        u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+        x5 = (uint32_t) regs[0];
+        if (SMC_32 == GET_SMC_CC(smc_fid)) {
+            x6 = (uint32_t) (regs[0] >> 32);
+        } else {
+            x6 = (uint32_t) regs[1];
+        }
+        if (QTI_SIP_VERIFY_FS_HASH_PARAM_ID == x1) {
+            SMC_RET1(handle, sec_img_auth_fs_hash((uint32_t)x2,
+                     (uint32_t)x3, (uint32_t)x4, x5, x6));
+        }
+        SMC_RET1(handle, SMC_UNK);
+    }
     default:
     {
         QTISECLIB_CB_ERROR("x0 = 0%x, x1 = 0x%p, x2 = 0x%p, x3 = 0x%p\n",

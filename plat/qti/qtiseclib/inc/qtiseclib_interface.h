@@ -138,4 +138,13 @@ int32_t tmel_qwes_bindings_check(uint32_t bindCheckReqBuff,
 								 void *rsp);
 #endif /* UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING */
 
+int32_t sec_img_auth_using_tme_l(uint32_t  elfAddr,
+				uint32_t  buffSize,
+				uint32_t  sec_img_id,
+				void *regionbuf,
+				uint32_t  regionbufsize,
+				void *rsp);
+int32_t sec_img_auth_fs_hash(uint32_t sw_type, uintptr_t img_addr, uint32_t img_size,
+				uintptr_t hash_addr, uint32_t hash_size);
+
 #endif /* __QTISECLIB_INTERFACE_H__ */
