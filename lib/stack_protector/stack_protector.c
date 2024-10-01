@@ -3,11 +3,18 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+ 
 #include <stdint.h>
 
 #include <common/debug.h>
 #include <plat/common/platform.h>
+#include "qtiseclib_interface.h"
+#include "qtiseclib_defs.h"
 
 /*
  * Canary value used by the compiler runtime checks to detect stack corruption.
@@ -27,6 +34,7 @@ void __dead2 __stack_chk_fail(void)
 #if DEBUG
 	ERROR("Stack corruption detected\n");
 #endif
+	qti_set_reset_reason(ERR_FATAL_QSEE_STACK_CHK_FAILED);
 	panic();
 }
 
