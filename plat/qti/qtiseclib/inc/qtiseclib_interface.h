@@ -94,6 +94,7 @@ int qtiseclib_dpr_addr_send_tmel(uint32_t addr, uint32_t size);
 void qtiseclib_get_smem_targ_info(uint64_t *addr, uint64_t *size);
 void qtiseclib_get_smem_base_addr(uint64_t *addr, uint64_t *size);
 void qtiseclib_set_image_version(char *major, char *minor, char *atf_commit);
+void qti_set_reset_reason(uint32_t value);
 
 
 int qtiseclib_qfprom_fuse_secdat(uint32_t *);

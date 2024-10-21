@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
+# Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+#
 
 # Boolean macro to be used in C code
 STACK_PROTECTOR_ENABLED := 0
@@ -22,5 +26,8 @@ ifneq (${ENABLE_STACK_PROTECTOR},none)
     TF_CFLAGS		+=	-fstack-protector-${ENABLE_STACK_PROTECTOR}
   endif
 endif
+
+STACK_PROTECTOR_LIB_INCLUDES	:=	-Iinclude/plat/qti/qtiseclib/inc/
+
 
 $(eval $(call add_define,STACK_PROTECTOR_ENABLED))

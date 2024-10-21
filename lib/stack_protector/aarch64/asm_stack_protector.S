@@ -29,9 +29,7 @@
 func update_stack_protector_canary
 	/* Use x19 as it is callee-saved */
 	mov	x19, x30
-#ifdef MARINA_BRINGUP
 	bl	plat_get_stack_protector_canary
-#endif
 
 	/* Update the canary with the returned value */
 	adrp	x1,  __stack_chk_guard

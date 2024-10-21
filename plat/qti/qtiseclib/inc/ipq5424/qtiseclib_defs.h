@@ -33,6 +33,9 @@ typedef uintptr_t u_register_t;
 #define QTI_GICV3_IRM_PE		0
 #define QTI_GICV3_IRM_ANY		1
 
+/* QSEE defined error fatal reason codes. */
+#define ERR_FATAL_QSEE_STACK_CHK_FAILED 58
+
 /* Interrupt number/ID defs. TODO: Chipset specific.
    Need to be feature gurded with Chipset Macro. */
 #define QTISECLIB_INT_ID_SEC_WDOG_BARK			(0x36)
