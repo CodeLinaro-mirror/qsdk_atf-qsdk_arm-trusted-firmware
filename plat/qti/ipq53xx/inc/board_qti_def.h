@@ -18,7 +18,7 @@
  */
 
 /* Size of cacheable stacks */
-#define PLATFORM_STACK_SIZE	0x800
+#define PLATFORM_STACK_SIZE	0x1500
 
 /*
  * PLAT_QTI_MMAP_ENTRIES depends on the number of entries in the

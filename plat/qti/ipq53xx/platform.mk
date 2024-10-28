@@ -106,10 +106,12 @@ BL31_SOURCES		+=	${QTI_BL31_SOURCES}					\
 
 
 LIB_QTI_PATH	:=	${QTI_PLAT_PATH}/qtiseclib/lib/${CHIPSET}
-
+LIB_SECBOOT_PATH    :=  ${QTI_PLAT_PATH}/secbootlib/lib/${CHIPSET}
 # By default libqtisec_dbg.a used by debug variant. When this library doesn't exist,
 # debug variant will use release version (libqtisec.a) of the library.
 QTISECLIB = qtisec
+SECBOOTLIB = secboot
+
 ifneq (${DEBUG}, 0)
 ifneq ("$(wildcard $(LIB_QTI_PATH)/libqtisec_dbg.a)","")
 QTISECLIB = qtisec_dbg
@@ -118,6 +120,25 @@ $(warning Release version of qtisec library used in Debug build!!..)
 endif
 endif
 
+ifneq (${DEBUG}, 0)
+ifneq ("$(wildcard $(LIB_SECBOOT_PATH)/libsecboot_dbg.a)","")
+SECBOOTLIB = secboot_dbg
+else
+$(warning Release version of secboot library used in Debug build!!..)
+endif
+endif
+
+#Link secboot library only for LM profile
+ifeq (${LM_PROFILE},1)
+$(eval $(call add_define_val,SECBOOT_ENABLE,1))
+SECBOOT_ENABLE  :=      1
+endif
+
 LDFLAGS += -z max-page-size=4096 -L ${LIB_QTI_PATH}
 LDLIBS += -l$(QTISECLIB)
+
+ifeq (${SECBOOT_ENABLE},1)
+LDFLAGS += -L ${LIB_SECBOOT_PATH}
+LDLIBS += -l$(SECBOOTLIB)
+endif
 

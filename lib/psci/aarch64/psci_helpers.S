@@ -63,7 +63,8 @@ func psci_do_pwrdown_cache_maintenance
 	 * stack base address in x0.
 	 * ---------------------------------------------
 	 */
-	sub	x0, x19, #PLATFORM_STACK_SIZE
+	mov     x1, #PLATFORM_STACK_SIZE
+	sub	x0, x19, x1
 	sub	x1, sp, x0
 	bl	inv_dcache_range
 

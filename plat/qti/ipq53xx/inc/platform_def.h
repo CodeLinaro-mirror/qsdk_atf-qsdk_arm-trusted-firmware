@@ -155,7 +155,7 @@
 #else
 #define BL31_BASE						0x4A600000
 #endif
-#define BL31_SIZE						0x64000
+#define BL31_SIZE						0x80000
 #define QTI_TRUSTED_MAILBOX_SIZE				0x1000
 #define BL31_LIMIT						(BL31_BASE + BL31_SIZE - QTI_TRUSTED_MAILBOX_SIZE)
 
@@ -165,7 +165,7 @@
 /*
  * DIAG Start is placed 8K apart from __PIL_REGION_END__
  */
-#define QTI_DIAG_RG_START               BL31_BASE + 0x45000
+#define QTI_DIAG_RG_START               BL31_BASE + 0x5C000
 #define QTI_DIAG_RG_SIZE                0x3000
 #define QTI_DIAG_RG_LIMIT               QTI_DIAG_RG_START + QTI_DIAG_RG_SIZE
 

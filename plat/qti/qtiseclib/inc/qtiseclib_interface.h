@@ -141,6 +141,11 @@ uint32_t qtiseclib_get_secure_state(void);
 int qtiseclib_read_tmel_fuse_multiple_rows(uint32_t *addr, uint32_t size);
 int qtiseclib_irong_wcss_read(uint32_t addr, void *rsp);
 int qtiseclib_irong_wcss_write(uint32_t addr, uint32_t val);
+
+/*Secboot LIB API's*/
+int secbootlib_kernel_auth(uintptr_t kernel_load_addr);
+int secbootlib_sec_img_auth(uint32_t sw_type, uint32_t img_size, uintptr_t img_addr);
+int secbootlib_sec_img_auth_multi_segment_hash(uint32_t  elfAddr, uint32_t buffSize, uint32_t sec_img_id, uintptr_t reg, uint32_t regbufsize, uintptr_t hash_addr, uint32_t hash_size);
 #endif
 
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING

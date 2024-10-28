@@ -68,6 +68,19 @@
 #define	QTI_SIP_SVC_MEM_ASSIGN_ID			U(0x02000C16)
 #define	QTI_SIP_SVC_RESET_DEBUG_ID				U(0x02000109)
 
+#if SECBOOT_ENABLE
+#define QTI_SIP_SVC_KERNEL_AUTH_ID            U(0x0200011E)
+#define QTI_SIP_SVC_KERNEL_AUTH_PARAM_ID      U(0x1)
+
+#define QTI_SIP_SVC_SEC_IMG_AUTH_ID            U(0x0200011F)
+#define QTI_SIP_SVC_SEC_IMG_AUTH_PARAM_ID      U(0x203)
+
+#define QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_ID		U(0x02000124)
+#define QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_PARAM_ID 	U(0x4407)
+
+#endif
+
+
 /*
  * Syscall for PIL
  */
@@ -180,6 +193,11 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_TEST_XPU_ERR_COUNT_ID:
 		case QTI_TEST_XPU_ERR_COUNT_CLEAR_ID:
 		case QTI_TEST_STACK_PROTECTION_ID:
+#if SECBOOT_ENABLE
+                case QTI_SIP_SVC_KERNEL_AUTH_ID:
+		case QTI_SIP_SVC_SEC_IMG_AUTH_ID:
+		case QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_ID:
+#endif
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 		case QTI_SIP_SVC_PIL_INIT_ID:
 #elif QTI_53XX_PLATFORM
@@ -385,6 +403,51 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 		else
 			SMC_RET1(handle, SMC_UNK);
 		}
+#endif
+
+#if SECBOOT_ENABLE
+        case QTI_SIP_SVC_KERNEL_AUTH_ID:
+                {
+                if(QTI_SIP_SVC_KERNEL_AUTH_PARAM_ID == x1){
+                        SMC_RET1(handle, secbootlib_kernel_auth(x2));
+                        }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+                }
+
+        case QTI_SIP_SVC_SEC_IMG_AUTH_ID:
+                {
+                if(QTI_SIP_SVC_SEC_IMG_AUTH_PARAM_ID == x1){
+                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth(x2,x3,x4));
+                        }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+                }
+
+	case QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_ID:
+                {
+                if(QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_PARAM_ID == x1){
+
+                        uint32_t x5,x6,x7,x8;
+			u_register_t *regs = (u_register_t *) read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+			x5 = (uint32_t) regs[0];
+
+        		if (SMC_32 == GET_SMC_CC(smc_fid)) {
+            			x6 = (uint32_t) (regs[0] >> 32);
+            			x7 = (uint32_t) regs[1];
+            			x8 = (uint32_t) (regs[1] >> 32);
+        		} else {
+            			x6 = (uint32_t) regs[1];
+				x7 = (uint32_t) regs[2];
+				x8 = (uint32_t) regs[3];
+			}
+
+                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth_multi_segment_hash(x2,x3,x4,x5,x6,x7,x8));
+                        }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+                }
+
 #endif
 
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
