@@ -53,10 +53,7 @@
 #define QTI_SIP_DO_HLOS_MODE_SWITCH             U(0x0200010F)
 #define QTI_SIP_PROTECT_MEM_SUBSYS_ID           U(0x0200020C)
 #define QTI_SIP_CLEAR_MEM_SUBSYS_ID             U(0x0200020D)
-#define QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID       U(0x02000821)
-#if QTI_53XX_PLATFORM
 #define QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID    U(0x02000822)
-#endif
 
 #if  QTI_5018_PLATFORM || QTI_9574_PLATFORM || QTI_53XX_PLATFORM
 #define QTI_SIP_BLOW_FUSE_SEC_DAT_ID		U(0x02000820)
@@ -204,9 +201,7 @@ smc_id &= 0x3FFFFFFF;
 		case QTI_SIP_SVC_PIL_USERPD1_BRINGUP_ID:
 		case QTI_SIP_SVC_PIL_USERPD1_TEARDOWN_ID:
 #endif
-#if QTI_53XX_PLATFORM
 		case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
-#endif
 #ifdef UNIT_TEST_DEVICE_ATTESTATION_AND_PROVISIONING
 		case QTI_SIP_QWES_INIT_ATTESTATION_ID:
 		case QTI_SIP_QWES_GET_DEVICE_ATTESTATION_REPORT_ID:
@@ -489,25 +484,6 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			SMC_RET1(handle, SMC_UNK);
 		}
 #endif
-#if QTI_9574_PLATFORM
-	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
-               {
-                       if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1){
-                               SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2));
-                       }
-        else
-                        SMC_RET1(handle, SMC_UNK);
-               }
-#elif QTI_53XX_PLATFORM
-#if MARINA_BRINGUP
-	case QTI_SIP_DPR_SEND_LOAD_ADDRESS_ID:
-        {
-                if (QTI_SIP_DPR_SEND_LOAD_ADDRESS_PARAM_ID == x1) {
-                        SMC_RET2(handle, SMC_OK, qtiseclib_dpr_addr_send_tmel(x2, (uint32_t) x3));
-                }
-                else
-                        SMC_RET1(handle, SMC_UNK);
-        }
 	case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
         {
                 if (QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_PARAM_ID == x1) {
@@ -516,8 +492,6 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                 else
                         SMC_RET1(handle, SMC_UNK);
         }
-#endif
-#endif
 
 #if MARINA_BRINGUP
 	case QTI_TEST_XPU_ERR_COUNT_ID:
