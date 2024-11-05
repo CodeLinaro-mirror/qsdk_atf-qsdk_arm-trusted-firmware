@@ -145,7 +145,18 @@ int32_t sec_img_auth_using_tme_l(uint32_t  elfAddr,
 				void *regionbuf,
 				uint32_t  regionbufsize,
 				void *rsp);
+
+int32_t sec_img_auth_v2_using_tme_l(uint32_t  elfAddr,
+                                   uint32_t  buffSize,
+                                   /* buffSize will have the size for elf hdr, prog hdr and hash table */
+                                   uint32_t  sec_img_id,
+                                   void *reg,
+                                   uint32_t  regbufsize,
+                                   uintptr_t hash_addr,
+                                   uint32_t hash_size,
+                                   void *rsp);
+
 int32_t sec_img_auth_fs_hash(uint32_t sw_type, uintptr_t img_addr, uint32_t img_size,
-				uintptr_t hash_addr, uint32_t hash_size);
+				uintptr_t hash_addr, uint32_t hash_size, void *rsp);
 
 #endif /* __QTISECLIB_INTERFACE_H__ */
