@@ -19,7 +19,8 @@
  */
 
 static const uintptr_t qti_secure_io_allowed_regs[] = {
-	0x195C100,
+	0x195C100, /* TCSR_BOOT_MISC_DETECT */
+	0x195C158, /* TCSR_BOOT_INFO */
 };
 
 #endif /* __QTI_SECURE_IO_CFG_H__ */
