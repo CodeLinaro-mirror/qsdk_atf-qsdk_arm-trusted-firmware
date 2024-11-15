@@ -59,6 +59,9 @@ typedef uintptr_t u_register_t;
 #define QTISECLIB_INT_ID_AGGR_NOC_ERROR			(0xDE)
 #define QTISECLIB_INT_ID_NSS_NOC_ERROR			(0xE0)
 #define QTISECLIB_INT_ID_TME_IPC                        (0xEA)
+
+#define QTISECLIB_INT_ID_XPU_VIOLATION                  (0x1A5)
+
 #define	QTISECLIB_INT_INVALID_INT_NUM			(0xFFFFFFFFU)
 
 
