@@ -128,11 +128,9 @@ $(warning Release version of secboot library used in Debug build!!..)
 endif
 endif
 
-#Link secboot library only for LM profile
-ifeq (${LM_PROFILE},1)
+#Link secboot library
 $(eval $(call add_define_val,SECBOOT_ENABLE,1))
 SECBOOT_ENABLE  :=      1
-endif
 
 LDFLAGS += -z max-page-size=4096 -L ${LIB_QTI_PATH}
 LDLIBS += -l$(QTISECLIB)
