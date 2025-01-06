@@ -7,7 +7,7 @@
 
 /*
  * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
- * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -21,6 +21,7 @@
 #include <qti_secure_io_cfg.h>
 #include <qtiseclib_interface.h>
 #include <qtiseclib_cb_interface.h>
+#include <arch_helpers.h>
 
 /*----------------------------------------------------------------------------
  * SIP service - SMC function IDs for SiP Service queries
@@ -50,6 +51,9 @@
 
 #define	FUNCID_OEN_NUM_MASK  ((FUNCID_OEN_MASK << FUNCID_OEN_SHIFT)\
                                 |(FUNCID_NUM_MASK << FUNCID_NUM_SHIFT) )
+
+#define QTI_MASK_BITS(h,l)     ((0xffffffff >> (32 - ((h - l) + 1))) << l)
+#define QTI_SYSCALL_NUM_ARGS(r1)   (r1 & QTI_MASK_BITS(3,0))
 
 /* QTI SiP Service UUID */
 DEFINE_SVC_UUID2(qti_sip_svc_uid,
@@ -124,6 +128,24 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         x4 = (uint32_t)x4;
     }
 
+    uint32_t nargs=0;
+    /*
+     * Extract the lower 4 bits from the parameter ID,
+     * as the total number of arguments is represented in these last 4 bits.
+     */
+    nargs = QTI_SYSCALL_NUM_ARGS(x1) ;
+    u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
+    if(nargs > 4)
+    {
+        uint32_t indirect_params_num  = nargs - 3;
+        if(SMC_32 == GET_SMC_CC(smc_fid)){
+                inv_dcache_range((uintptr_t)regs, sizeof(uint32_t)*indirect_params_num);
+        }
+        else{
+                inv_dcache_range((uintptr_t)regs, sizeof(uint64_t)*indirect_params_num);
+        }
+    }
+
     switch (l_smc_fid) {
         case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
         {
@@ -162,7 +184,6 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         case QTI_SIP_SECURE_AUTH_ID:
         {
             uint32_t x5, x6;
-            u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
             x5 = (uint32_t) regs[0];
             if (SMC_32 == GET_SMC_CC(smc_fid)) {
                 x6 = (uint32_t) (regs[0] >> 32);
@@ -178,7 +199,6 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         case QTI_SIP_SECURE_AUTH_V2_ID:
         {
             u_register_t x5, x6, x7, x8;
-            u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
             x5 = (uint32_t) regs[0];
             /* Retrieve indirect args. */
             if (SMC_32 == GET_SMC_CC(smc_fid)) {
@@ -199,7 +219,6 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         case QTI_SIP_VERIFY_FS_HASH_ID:
         {
             uint32_t x5, x6;
-            u_register_t *regs = (u_register_t *)read_ctx_reg(get_gpregs_ctx(handle), CTX_GPREG_X5);
             x5 = (uint32_t) regs[0];
             if (SMC_32 == GET_SMC_CC(smc_fid)) {
                 x6 = (uint32_t) (regs[0] >> 32);
