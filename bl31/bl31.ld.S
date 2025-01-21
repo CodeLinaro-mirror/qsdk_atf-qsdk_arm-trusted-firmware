@@ -6,7 +6,7 @@
 
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -73,6 +73,10 @@ SECTIONS
 
     .rodata . : {
         __RODATA_START__ = ALIGN(PAGE_SIZE);
+        __VERSION_STRINGS_START__ = .;
+        KEEP(*(.version_strings))
+        . = ALIGN(PAGE_SIZE);
+        __VERSION_STRINGS_END__ = .;
         *(.rodata*)
 
         /* Ensure 8-byte alignment for descriptors and ensure inclusion */
