@@ -93,6 +93,10 @@ SECTIONS
 
     .rodata . : {
         __RODATA_START__ = ALIGN(PAGE_SIZE);
+        __VERSION_STRINGS_START__ = .;
+        KEEP(*(.version_strings))
+        . = ALIGN(PAGE_SIZE);
+        __VERSION_STRINGS_END__ = .;
         *(.rodata*)
 
         /* Ensure 8-byte alignment for descriptors and ensure inclusion */
