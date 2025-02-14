@@ -146,6 +146,7 @@ int qtiseclib_irong_wcss_write(uint32_t addr, uint32_t val);
 int secbootlib_kernel_auth(uintptr_t kernel_load_addr);
 int secbootlib_sec_img_auth(uint32_t sw_type, uint32_t img_size, uintptr_t img_addr);
 int secbootlib_sec_img_auth_multi_segment_hash(uint32_t  elfAddr, uint32_t buffSize, uint32_t sec_img_id, uintptr_t reg, uint32_t regbufsize, uintptr_t hash_addr, uint32_t hash_size);
+int secbootlib_sec_img_auth_fs(uint32_t sw_type, uintptr_t img_addr, uint32_t img_size, uintptr_t hash_addr, uint32_t hash_size);
 #endif
 #if QTI_9574_PLATFORM
 int qtiseclib_read_tmel_fuse(uint32_t *addr, uint32_t size);
