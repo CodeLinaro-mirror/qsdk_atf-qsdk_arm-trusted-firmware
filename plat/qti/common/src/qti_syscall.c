@@ -82,6 +82,8 @@
 #define QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_ID		U(0x02000124)
 #define QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_PARAM_ID 	U(0x4407)
 
+#define QTI_SIP_SVC_SEC_IMG_AUTH_FS_ID          U(0x02000123)
+#define QTI_SIP_SVC_SEC_IMG_AUTH_FS_PARAM_ID    U(0x00000885)
 #endif
 
 
@@ -203,6 +205,7 @@ smc_id &= 0x3FFFFFFF;
                 case QTI_SIP_SVC_KERNEL_AUTH_ID:
 		case QTI_SIP_SVC_SEC_IMG_AUTH_ID:
 		case QTI_SIP_SVC_AUTH_SEC_IMG_AUTH_MULTI_SEGMENT_ID:
+                case QTI_SIP_SVC_SEC_IMG_AUTH_FS_ID:
 #endif
 #if QTI_5018_PLATFORM || QTI_9574_PLATFORM
 		case QTI_SIP_SVC_PIL_INIT_ID:
@@ -464,6 +467,24 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 			}
 
                         SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth_multi_segment_hash(x2,x3,x4,x5,x6,x7,x8));
+                        }
+                else
+                        SMC_RET1(handle, SMC_UNK);
+                }
+        case QTI_SIP_SVC_SEC_IMG_AUTH_FS_ID:
+                {
+                if(QTI_SIP_SVC_SEC_IMG_AUTH_FS_PARAM_ID == x1){
+
+                        uint32_t x5,x6;
+                        x5 = (uint32_t) regs[0];
+
+                        if (SMC_32 == GET_SMC_CC(smc_fid)) {
+                                x6 = (uint32_t) (regs[0] >> 32);
+                        } else {
+                                x6 = (uint32_t) regs[1];
+                        }
+
+                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth_fs(x2,x3,x4,x5,x6));
                         }
                 else
                         SMC_RET1(handle, SMC_UNK);
