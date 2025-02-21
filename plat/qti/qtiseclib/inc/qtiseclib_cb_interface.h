@@ -39,6 +39,7 @@ int qtiseclib_cb_mmap_add_dynamic_region(unsigned long long base_pa,
 					 qtiseclib_mmap_attr_t attr);
 
 void qtiseclib_cb_inv_dcache_range(uintptr_t addr, size_t size);
+void qtiseclib_cb_flush_dcache_range(uintptr_t addr, size_t size);
 
 void qtiseclib_cb_tlbialle3(void);
 
