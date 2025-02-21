@@ -465,8 +465,9 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 				x7 = (uint32_t) regs[2];
 				x8 = (uint32_t) regs[3];
 			}
-
-                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth_multi_segment_hash(x2,x3,x4,x5,x6,x7,x8));
+                        int ret_val = secbootlib_sec_img_auth_multi_segment_hash(x2,x3,x4,x5,x6,x7,x8);
+			qtiseclib_cb_flush_dcache_range(x2,x3);
+                        SMC_RET2(handle, SMC_OK, ret_val);
                         }
                 else
                         SMC_RET1(handle, SMC_UNK);
