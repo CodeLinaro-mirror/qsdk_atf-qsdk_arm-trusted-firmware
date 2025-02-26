@@ -431,6 +431,13 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 #endif
 
 #if SECBOOT_ENABLE
+        /*
+         * For all Sec-auth SMC called during SysUpgrade, the image buffer shared by kernel is
+         * cleared from cache before returning. This avoids wrongly reading from cached version
+         * of the buffer(which may contain previous image data), in case the same buffer is shared
+         * by kernel in the subsequent auth calls.
+         * Note: flush_dcache API used here both flushes and invalidated the range
+         */
         case QTI_SIP_SVC_KERNEL_AUTH_ID:
                 {
                 if(QTI_SIP_SVC_KERNEL_AUTH_PARAM_ID == x1){
@@ -443,7 +450,9 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
         case QTI_SIP_SVC_SEC_IMG_AUTH_ID:
                 {
                 if(QTI_SIP_SVC_SEC_IMG_AUTH_PARAM_ID == x1){
-                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth(x2,x3,x4));
+                        int ret_val = secbootlib_sec_img_auth(x2,x3,x4);
+                        qtiseclib_cb_flush_dcache_range(x4,x3);
+                        SMC_RET2(handle, SMC_OK, ret_val);
                         }
                 else
                         SMC_RET1(handle, SMC_UNK);
@@ -484,8 +493,9 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                         } else {
                                 x6 = (uint32_t) regs[1];
                         }
-
-                        SMC_RET2(handle, SMC_OK, secbootlib_sec_img_auth_fs(x2,x3,x4,x5,x6));
+                        int ret_val =secbootlib_sec_img_auth_fs(x2,x3,x4,x5,x6);
+                        qtiseclib_cb_flush_dcache_range(x2,x3);
+                        SMC_RET2(handle, SMC_OK, ret_val);
                         }
                 else
                         SMC_RET1(handle, SMC_UNK);
