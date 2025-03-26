@@ -109,6 +109,8 @@ uint32_t qtiseclib_get_secure_state(void);
 void mon_configure_clusterthreadsid_for_nsworld(bool is_reserved_cpu_core);
 void mon_configure_clusterthreadsid_for_secureworld(void);
 void mon_configure_clusterbusqos(void);
+void mon_configure_actlr_el3(void);
+void mon_configure_actlr_el2(void);
 
 int qtiseclib_read_tmel_fuse_multiple_rows(uint32_t *addr, uint32_t size);
 
@@ -158,5 +160,7 @@ int32_t sec_img_auth_v2_using_tme_l(uint32_t  elfAddr,
 
 int32_t sec_img_auth_fs_hash(uint32_t sw_type, uintptr_t img_addr, uint32_t img_size,
 				uintptr_t hash_addr, uint32_t hash_size, void *rsp);
+
+int32_t secure_cfg_sys_reg(u_register_t func_id, uint32_t param1, uint32_t param2);
 
 #endif /* __QTISECLIB_INTERFACE_H__ */

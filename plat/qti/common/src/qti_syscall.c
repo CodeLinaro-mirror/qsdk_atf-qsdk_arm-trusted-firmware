@@ -34,8 +34,10 @@
  */
 #define	QTI_SIP_SVC_SECURE_IO_READ_ID                   U(0x02000501)
 #define	QTI_SIP_SVC_SECURE_IO_WRITE_ID                  U(0x02000502)
+#define QTI_TZ_IO_CFG_SYS_REG_ID                        U(0x02000503)
 #define	QTI_SIP_SVC_SECURE_IO_READ_PARAM_ID             U(0x1)
 #define	QTI_SIP_SVC_SECURE_IO_WRITE_PARAM_ID            U(0x2)
+#define	QTI_TZ_IO_CFG_SYS_REG_ID_PARAM_ID               U(0x3)
 
 #define QTI_SIP_IS_SMC_AVAILABLE_ID                     U(0x02000601)
 #define QTI_DUMP_SET_CPU_CTX_BUF_ID                     U(0x02000302)
@@ -88,6 +90,7 @@ static bool qti_is_smc_available(uint32_t smc_id)
         case QTI_SIP_SECURE_AUTH_ID:
         case QTI_SIP_SECURE_AUTH_V2_ID:
         case QTI_SIP_VERIFY_FS_HASH_ID:
+        case QTI_TZ_IO_CFG_SYS_REG_ID:
                 return true;
         default:
                 return false;
@@ -179,6 +182,14 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
                 qti_is_secure_io_access_allowed(x2)) {
                     *((volatile uint32_t *)x2) = x3;
                     SMC_RET2(handle, SMC_OK, SMC_OK);
+            }
+            SMC_RET1(handle, SMC_UNK);
+        }
+        case QTI_TZ_IO_CFG_SYS_REG_ID:
+        {
+            if (QTI_TZ_IO_CFG_SYS_REG_ID_PARAM_ID == x1){
+                ret = secure_cfg_sys_reg(x2, x3, x4);
+                SMC_RET2(handle, SMC_OK, ret);
             }
             SMC_RET1(handle, SMC_UNK);
         }

@@ -213,3 +213,22 @@ void qti_configure_clusterthreadsid_nsworld(void)
 
         return mon_configure_clusterthreadsid_for_nsworld( ((cpu_num == 3u) ? true : false) );
 }
+/**
+ * Helper function to configure actlr_el2
+ * @param [in] void
+ * @return void.
+ */
+void qti_configure_actlr_el2(void)
+{
+	return mon_configure_actlr_el2();
+}
+
+/**
+ * Helper function to configure actlr_el3
+ * @param [in] void
+ * @return void.
+ */
+void qti_configure_actlr_el3(void)
+{
+	return mon_configure_actlr_el3();
+}

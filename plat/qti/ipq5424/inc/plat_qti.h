@@ -58,5 +58,7 @@ void gic_set_spi_routing(unsigned int id, unsigned int irm,
 void qti_configure_clusterbusqos(void);
 void qti_configure_clusterthreadsid_secworld(void);
 void qti_configure_clusterthreadsid_nsworld(void);
+void qti_configure_actlr_el2(void);
+void qti_configure_actlr_el3(void);
 
 #endif /* __PLAT_QTI_H__ */

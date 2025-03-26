@@ -152,13 +152,11 @@ mon_configure_clusterthreadsid_for_nsworld:
     beq     reserved_core_config_scid
     mov     x0, xzr  /* set scheme ID as 0x0 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
     msr     s3_0_c15_c4_0, x0  /* Write x0 into CLUSTERTHREADSID_EL1 */
-//    mrs     x1, s3_0_c15_c4_0  /* Read CLUSTERTHREADSID_EL1 into x1 for testing */
     ret
 reserved_core_config_scid:
     mov     x0, xzr ;
     orr     x0, x0, #0x1  /* set scheme ID as 0x1 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
     msr     s3_0_c15_c4_0, x0  /* Write x0 into CLUSTERTHREADSID_EL1 */
-//    mrs     x1, s3_0_c15_c4_0  /* Read CLUSTERTHREADSID_EL1 into x1 for testing */
     ret
 
 /*--------------------------------------------------------------------
@@ -172,5 +170,32 @@ mon_configure_clusterthreadsid_for_secureworld:
     mov     x6, xzr ;
     orr     x6, x6, #0x2  /* set scheme ID as 0x2 for this thread. scheme ID bits are 0-2, 3-31 is RAZ */
     msr     s3_0_c15_c4_0, x6  /* Write x6 into CLUSTERTHREADSID_EL1 */
-//    mrs     x5, s3_0_c15_c4_0  /*Read CLUSTERTHREADSID_EL1 into x5 for testing */
+    ret
+
+/*--------------------------------------------------------------------
+* Configure ACTLR_EL2.TSIDEN(Thread Scheme ID Register write access control)
+* during cold/warm boot of the ARM cores
+*--------------------------------------------------------------------*/
+    .global mon_configure_actlr_el2
+.type mon_configure_actlr_el2,%function
+mon_configure_actlr_el2:
+    mrs x0, ACTLR_EL2
+    // Set ACTLR_EL2.TSIDEN (bit 10)
+    orr x0, x0, #0x400
+    msr ACTLR_EL2, x0
+    ret
+
+/*--------------------------------------------------------------------
+* Configure ACTLR_EL3.SMEN (Scheme Management Register write access control)
+* and ACTLR_EL3.TSIDEN(Thread Scheme ID Register write access control) during
+* cold/warm boot of the ARM cores
+*--------------------------------------------------------------------*/
+    .global mon_configure_actlr_el3
+.type mon_configure_actlr_el3,%function
+mon_configure_actlr_el3:
+    mrs x0, ACTLR_EL3
+    // Set ACTLR_EL3.TSIDEN (bit 10) and ACTLR_EL3.SMEN (bit 11) to 1
+    orr x0, x0, #0x400
+    orr x0, x0, #0x800
+    msr ACTLR_EL3, x0
     ret

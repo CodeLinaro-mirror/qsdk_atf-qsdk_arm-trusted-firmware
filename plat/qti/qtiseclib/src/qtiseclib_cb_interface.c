@@ -272,3 +272,9 @@ void qtiseclib_cb_configure_clusterbusqos(void)
 {
 	qti_configure_clusterbusqos();
 }
+
+void qtiseclib_cb_configure_actlr(void)
+{
+	qti_configure_actlr_el2();
+	qti_configure_actlr_el3();
+}
