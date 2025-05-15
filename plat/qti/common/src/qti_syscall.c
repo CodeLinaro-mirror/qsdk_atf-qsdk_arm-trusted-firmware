@@ -29,6 +29,8 @@
 #include <qtiseclib_cb_interface.h>
 #include <arch_helpers.h>
 
+#define SMC_ERR_SYSCALL_FAILED            -2L
+
 /*----------------------------------------------------------------------------
  * SIP service - SMC function IDs for SiP Service queries
  * -------------------------------------------------------------------------*/
@@ -607,8 +609,15 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 	case QTI_SIP_TMEL_FUSE_READ_ID:
 	{
 		if (QTI_SIP_TMEL_FUSE_READ_PARAM_ID == x1) {
-			SMC_RET2(handle, SMC_OK, qtiseclib_read_tmel_fuse(
-						(uint32_t *)x2, (uint32_t) x3));
+			ret = qtiseclib_read_tmel_fuse((uint32_t *)x2, (uint32_t) x3);
+			if(ret)
+			{
+				SMC_RET2(handle, SMC_ERR_SYSCALL_FAILED, ret);
+			}
+			else
+			{
+				SMC_RET2(handle, SMC_OK, ret);
+			}
 		}
 		else
 			SMC_RET1(handle, SMC_UNK);
@@ -625,7 +634,15 @@ static uintptr_t qti_sip_handler(uint32_t smc_fid,
 	case QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_ID:
         {
                 if (QTI_SIP_TMEL_FUSE_READ_MULTIPLE_ROWS_PARAM_ID == x1) {
-                        SMC_RET2(handle, SMC_OK, qtiseclib_read_tmel_fuse_multiple_rows((uint32_t *)x2, (uint32_t) x3));
+                        ret = qtiseclib_read_tmel_fuse_multiple_rows((uint32_t *)x2, (uint32_t) x3);
+                        if(ret)
+                        {
+                            SMC_RET2(handle, SMC_ERR_SYSCALL_FAILED, ret);
+                        }
+                        else
+                        {
+                            SMC_RET2(handle, SMC_OK, ret);
+                        }
                 }
                 else
                         SMC_RET1(handle, SMC_UNK);
