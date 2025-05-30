@@ -22,6 +22,7 @@ static const uintptr_t qti_secure_io_allowed_regs[] = {
 	0x193d100,
 	0x193D204,
 	0x193D224,
+	0x1818000,	// HWIO_GCC_WCSS_Q6_BCR_ADDR
 };
 
 #endif /* __QTI_SECURE_IO_CFG_H__ */
